@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EH PI AY DOANG</title>
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/upload-file-lab/fileupload6/main/uploads/1759330984218.jpeg?format=png&name=900x900">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--scrollbar-thumb-hover);
+        }
+
+        .gray-glow {
+            box-shadow: 0 0 10px rgba(100, 100, 100, 0.3);
+            transition: all 0.3s ease;
+        }
+        .gray-glow:hover {
+            box-shadow: 0 0 15px rgba(100, 100, 100, 0.5);
+        }
+
+        .gray-gradient-text {
+            background: linear-gradient(-45deg, var(--gradient-colors));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-morph {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        :root {
+            --text-color: #f0f0f0;
+            --bg-gradient-from: #000;
+            --bg-gradient-via: #222;
+            --bg-gradient-to: #000;
+            --border-color: rgba(255, 255, 255, 0.2);
+            --glass-bg: rgba(0, 0, 0, 0.3);
+            --badge-bg: linear-gradient(to right, #333, #222);
+            --badge-text: #eee;
+            --gradient-colors: #fff, #ccc, #999, #666;
+            --scrollbar-track: linear-gradient(180deg, #1a1a1a, #0a0a0a);
+            --scrollbar-thumb: linear-gradient(180deg, #666, #555);
+            --scrollbar-thumb-hover: linear-gradient(180deg, #777, #666);
+            --button-bg: #666;
+            --project-card-bg: rgba(30, 30, 30, 0.7);
+            --project-card-border: rgba(100, 100, 100, 0.3);
+            --project-card-hover: rgba(40, 40, 40, 0.8);
+        }
+
+        body.wb-theme {
+            --text-color: #333;
+            --bg-gradient-from: #fff;
+            --bg-gradient-via: #eee;
+            --bg-gradient-to: #fff;
+            --border-color: rgba(0, 0, 0, 0.2);
+            --glass-bg: rgba(255, 255, 255, 0.5);
+            --badge-bg: linear-gradient(to right, #ddd, #eee);
+            --badge-text: #333;
+            --gradient-colors: #333, #555, #777, #999;
+            --scrollbar-track: linear-gradient(180deg, #e0e0e0, #d0d0d0);
+            --scrollbar-thumb: linear-gradient(180deg, #888, #666);
+            --scrollbar-thumb-hover: linear-gradient(180deg, #666, #555);
+            --button-bg: #999;
+            --project-card-bg: rgba(240, 240, 240, 0.7);
+            --project-card-border: rgba(200, 200, 200, 0.5);
+            --project-card-hover: rgba(220, 220, 220, 0.8);
+        }
+
+        body {
+            background: linear-gradient(to bottom right, var(--bg-gradient-from), var(--bg-gradient-via), var(--bg-gradient-to));
+            color: var(--text-color);
+            transition: all 0.5s ease;
+            min-height: 100vh;
+        }
+
+        .project-card {
+            background: var(--project-card-bg);
+            border: 1px solid var(--project-card-border);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .project-card:hover {
+            background: var(--project-card-hover);
+            transform: translateY(-5px);
+        }
+
+        .theme-button {
+            background: linear-gradient(to right, #9ca3af, #6b7280);
+            transition: all 0.3s ease;
+        }
+        .theme-button:hover {
+            background: linear-gradient(to right, #8b95a6, #5a6578);
+        }
+
+        .theme-button-private {
+            background: linear-gradient(to right, #6b7280, #4b5563);
+            opacity: 0.6;
+        }
+
+        .badge {
+            background: var(--badge-bg);
+            color: var(--badge-text);
+        }
+
+        audio {
+            background-color: var(--button-bg);
+            border-radius: 30px;
+            padding: 5px;
+        }
+
+        .api-card {
+            background: var(--project-card-bg);
+            border: 1px solid var(--project-card-border);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .api-card:hover {
+            background: var(--project-card-hover);
+            transform: translateY(-5px);
+        }
+
+        .api-endpoint {
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            word-break: break-all;
+        }
+
+        body.wb-theme .api-endpoint {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="font-sans">
+
+    <div class="theme-toggle" id="themeToggle">
+        <span id="themeIcon" class="text-xl">🌙</span>
+    </div>
+
+    <header class="glass-morph shadow-lg py-4 px-6 sticky top-0 z-50">
+        <nav class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl sm:text-3xl font-extrabold gray-gradient-text">
+                EH PI AY DOANG
+            </a>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        
+        <section id="header-section" class="glass-morph shadow-xl rounded-3xl p-8 mb-8 text-center">
+            <div class="mb-6">
+                <img src="https://raw.githubusercontent.com/upload-file-lab/fileupload6/main/uploads/1759330984218.jpeg" alt="memek" class="w-full max-w-xs mx-auto rounded-xl shadow-xl gray-glow transform hover:scale-105 transition-all duration-500">
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black gray-gradient-text mb-4 leading-tight tracking-wider">REST EH PI AY BY AFIQ</h1>
+            <p class="text-lg text-black-300 font-light tracking-wide">Kumpulan downloader API Endpoint yang mungkin berguna.</p>
+            <div class="mt-6 h-1 w-32 mx-auto bg-gradient-to-r from-gray-500 via-gray-400 to-gray-500 rounded-full"></div>
+        </section>
+        <section id="ai-endpoint" class="glass-morph shadow-xl rounded-3xl p-8 mb-8">
+            <h2 class="text-3xl font-black gray-gradient-text border-b-4 border-gray-700/50 pb-4 mb-8 flex items-center justify-center sm:justify-start gap-4">
+              AI  API ENDPOINT
+            </h2>
+                <div class="api-card rounded-2xl p-6 flex flex-col lg:flex-row justify-between items-center shadow-md">
+                    <p class="text-lg font-bold mb-3 lg:mb-0 lg:mr-4 text-black-200">GEMINI (Google GenAI):</p>
+                    <div class="flex flex-col lg:flex-row items-center w-full lg:w-auto gap-3">
+                        <a id="gemini-endpoint" href="/api/ai/gemini?text=&apikey=" class="api-endpoint text-blue-300 hover:text-gray-100 break-all text-sm px-4 py-2 rounded-lg transition-all duration-300" target="_blank">/api/gemini?text=&apikey=</a>
+                        <button onclick="copyUrl('gemini-endpoint')" class="theme-button text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105">Salin</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="downloader" class="glass-morph shadow-xl rounded-3xl p-8 mb-8">
+            <h2 class="text-3xl font-black gray-gradient-text border-b-4 border-gray-700/50 pb-4 mb-8 flex items-center justify-center sm:justify-start gap-4">
+               DOWNLOADER API ENDPOINT
+            </h2>
+            <div class="space-y-4">
+                <div class="api-card rounded-2xl p-6 flex flex-col lg:flex-row justify-between items-center shadow-md">
+                    <p class="text-lg font-bold mb-3 lg:mb-0 lg:mr-4 text-black-200">VIDEY DOWNLOADER:</p>
+                    <div class="flex flex-col lg:flex-row items-center w-full lg:w-auto gap-3">
+                        <a id="videy-endpoint" href="/api/downloader/videy?url=" class="api-endpoint text-blue-300 hover:text-gray-100 break-all text-sm px-4 py-2 rounded-lg transition-all duration-300" target="_blank">/api/videy?url=</a>
+                        <button onclick="copyUrl('videy-endpoint')" class="theme-button text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105">Salin</button>
+                    </div>
+                </div>
+                
+                <div class="api-card rounded-2xl p-6 flex flex-col lg:flex-row justify-between items-center shadow-md">
+                    <p class="text-lg font-bold mb-3 lg:mb-0 lg:mr-4 text-black-200">PIXELDRAIN DOWNLOADER:</p>
+                    <div class="flex flex-col lg:flex-row items-center w-full lg:w-auto gap-3">
+                        <a id="pixeldrain-endpoint" href="/api/downloader/pixeldrain?url=" class="api-endpoint text-blue-300 hover:text-gray-100 break-all text-sm px-4 py-2 rounded-lg transition-all duration-300" target="_blank">/api/pixeldrain?url=</a>
+                        <button onclick="copyUrl('pixeldrain-endpoint')" class="theme-button text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105">Salin</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tools" class="glass-morph shadow-xl rounded-3xl p-8 mb-8">
+            <h2 class="text-3xl font-black gray-gradient-text border-b-4 border-gray-700/50 pb-4 mb-8 flex items-center justify-center sm:justify-start gap-4">
+              TOOLS API ENDPOINT
+            </h2>
+                <div class="api-card rounded-2xl p-6 flex flex-col lg:flex-row justify-between items-center shadow-md">
+                    <p class="text-lg font-bold mb-3 lg:mb-0 lg:mr-4 text-black-200">IMAGE TOOLS:</p>
+                    <div class="flex flex-col lg:flex-row items-center w-full lg:w-auto gap-3">
+                        <a id="imagetools-endpoint" href="/api/tools/imagetools?imgurl=&type=" class="pxpic-endpoint text-blue-300 hover:text-gray-100 break-all text-sm px-4 py-2 rounded-lg transition-all duration-300" target="_blank">/api/tools/imagetools?imgurl=&type=</a>
+                        <button onclick="copyUrl('imagetools-endpoint')" class="theme-button text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105">Salin</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="sosmed" class="glass-morph shadow-xl rounded-3xl p-8 mb-8">
+            <h2 class="text-3xl font-black gray-gradient-text border-b-4 border-gray-700/50 pb-4 mb-6 flex items-center justify-center sm:justify-start gap-4">
+                SOCIAL MEDIA
+            </h2>
+            <p class="text-lg text-gray-300 mb-6 font-light">Connect with me:</p>
+            <ul class="flex flex-wrap justify-center gap-6">
+                <li>
+                    <a href="https://t.me/AfiqAjah" target="_blank" rel="noopener noreferrer" class="transition-all duration-300 hover:scale-105 block transform gray-glow">
+                        <img src="https://img.shields.io/badge/Telegram-0088CC?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram" class="rounded-xl shadow-lg">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://whatsapp.com/channel/0029VaoJb11LikgEpNpBty0e" target="_blank" rel="noopener noreferrer" class="transition-all duration-300 hover:scale-105 block transform gray-glow">
+                        <img src="https://img.shields.io/badge/WhatsApp_Channel-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WhatsApp" class="rounded-xl shadow-lg">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.instagram.com/rapikuzu_desu/" target="_blank" rel="noopener noreferrer" class="transition-all duration-300 hover:scale-105 block transform gray-glow">
+                        <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram" class="rounded-xl shadow-lg">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://youtube.com/@rapikuzudesu" target="_blank" rel="noopener noreferrer" class="transition-all duration-300 hover:scale-105 block transform gray-glow">
+                        <img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube" class="rounded-xl shadow-lg">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/iyayn-ajah" target="_blank" rel="noopener noreferrer" class="transition-all duration-300 hover:scale-105 block transform gray-glow">
+                        <img src="https://img.shields.io/badge/GITHUB-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" class="rounded-xl shadow-lg">
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <section class="flex justify-center">
+            <div class="glass-morph rounded-3xl p-8 shadow-xl w-full max-w-lg">
+                <div class="text-center mb-6">
+                    <div class="flex items-center justify-center gap-4 mb-4">
+                        <span class="text-3xl">🎵</span>
+                        <span class="text-2xl font-black gray-gradient-text">Now Playing</span>
+                        <span class="text-3xl">🎶</span>
+                    </div>
+                    <audio autoplay controls loop class="w-full rounded-full shadow-lg">
+                        <source src="https://files.catbox.moe/ar2c1c.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="glass-morph text-center p-8 mt-12">
+        <p class="text-lg font-medium">&copy; 2025 <span class="font-bold gray-gradient-text">RAPIKUZU DESUWA</span></p>
+    </footer>
+
+    <script>
+        function copyUrl(elementId) {
+            const endpointElement = document.getElementById(elementId);
+            if (endpointElement) {
+                const endpointUrl = endpointElement.href;
+                navigator.clipboard.writeText(endpointUrl).then(function() {
+                    showNotification("URL berhasil disalin! ✨", "success");
+                }).catch(function(error) {
+                    showNotification("Gagal menyalin URL: " + error, "error");
+                });
+            } else {
+                showNotification("Elemen tidak ditemukan.", "error");
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-xl shadow-2xl transition-all duration-500 transform translate-x-full ${
+                type === 'success' 
+                    ? 'bg-gradient-to-r from-gray-600 to-gray-700 text-white' 
+                    : 'bg-gradient-to-r from-red-600 to-red-700 text-white'
+            }`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(full)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
+        }
+
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const body = document.body;
+
+        const savedTheme = localStorage.getItem('theme') || 'bw-theme';
+        
+        if (savedTheme === 'wb-theme') {
+            body.classList.add('wb-theme');
+            themeIcon.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('wb-theme')) {
+                body.classList.remove('wb-theme');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'bw-theme');
+            } else {
+                body.classList.add('wb-theme');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'wb-theme');
+            }
+        });
+    </script>
+</body>
+</html>
