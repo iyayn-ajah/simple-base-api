@@ -147,6 +147,6 @@ res.end(buffernya);
 2. Log in to [vercel.com](https://vercel.com) with your GitHub account
 3. Add a project and select your forked repo to deploy
 4. Just wait for it to be ready
-5. Once it's ready, you're free to customize or rename it, just don't forget to credit it
+5. Once it's ready, you're free to customize or rename it, but don't forget to credit it
 
 -----
