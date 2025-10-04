@@ -81,7 +81,7 @@ router.get('/downloader/pixeldrain', async (req, res) => {
   }
 });
 
-//Tools
+// TOOLS ENDPOINT 
 router.get('/tools/imagetools', async (req, res) => {
   const imgurl = req.query.imgurl;
   const type = req.query.type;
