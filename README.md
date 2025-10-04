@@ -14,7 +14,7 @@ There may be a module missing for the scraper. If so, add it to package.json.
 
 ---
 
-# 🛠️ How to Add Features To index.js
+# 🛠️ How to Add Features to index.js
 Just follow this code structure:
 # json result
 ```javascript
