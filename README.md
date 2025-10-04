@@ -58,7 +58,7 @@ router.get('/category-name/endpoin-name', async (req, res) => {
   if (!text) return res.status(400).json({ error: "Missing 'text' parameter" });
   try {
 // Your code
- const buffer = buffer result from your code
+ const buffer = // buffer result from your code
     res.writeHead(200, {
                 'Content-Type': 'mimetype-file'
                 'Content-Length': buffer.length,
