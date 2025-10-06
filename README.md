@@ -37,7 +37,6 @@ const data = {
 router.get('/downloader/videy', async (req, res) => {
   const url = req.query.url;
   if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
-
   try {
     const videoId = url.split("=")[1];
     if (!videoId) return res.status(400).json({ error: "Invalid 'url' parameter" });
