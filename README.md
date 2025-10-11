@@ -9,7 +9,7 @@
 
 ---------
 ### 📃 NOTE
-There may be a module missing for the scraper. If so, add it to package.json.
+There may be a module missing for the scraper. If so, add it to package.json and index.js.
 ---------
 
 ---
