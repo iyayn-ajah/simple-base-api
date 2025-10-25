@@ -6,6 +6,7 @@ const { GoogleGenAI } = require('@google/genai');
 const { fromBuffer } = require('file-type');
 const axios = require("axios");
 const FormData = require("form-data");
+const { transcriptyt } = require('./lib/youtubetranscript.js');
 
 const app = express();
 const router = express.Router();
@@ -113,6 +114,17 @@ res.writeHead(200, {
             });
 res.end(buffernya);
  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
+router.get('/tools/yt-transcript', async (req, res) => {
+  const url = req.query.url;
+  if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
+  try {
+    const anunyah = await transcriptyt(url);
+    return res.json(anunyah);
+  } catch (e) {
     return res.status(500).json({ error: e.message });
   }
 });
