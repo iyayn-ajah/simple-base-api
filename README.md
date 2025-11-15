@@ -107,36 +107,36 @@ res.end(buffernya);
 ```
 -----
 
-## 📄 How to add API documentation to index.html
+## 📄 How to add API documentation to iyah.json
 # Add endpoint documentation with category
-```html
-<section id="category-endpoint" class="glass-morph shadow-xl rounded-3xl p-8 mb-8">
-            <h2 class="text-3xl font-black gray-gradient-text border-b-4 border-gray-700/50 pb-4 mb-8 flex items-center justify-center sm:justify-start gap-4">
-              API ENDPOINT
-            </h2>
-           <div class="space-y-4">
-                <div class="api-card rounded-2xl p-6 flex flex-col lg:flex-row justify-between items-center shadow-md">
-                    <p class="text-lg font-bold mb-3 lg:mb-0 lg:mr-4 text-black-200">API ENDPOINT:</p>
-                    <div class="flex flex-col lg:flex-row items-center w-full lg:w-auto gap-3">
-                        <a id="api-endpoint" href="/api/category/endpoint?text=" class="api-endpoint text-blue-300 hover:text-gray-100 break-all text-sm px-4 py-2 rounded-lg transition-all duration-300" target="_blank">/api/category/endpoint?url=</a>
-                        <button onclick="copyUrl('api-endpoint')" class="theme-button text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105">Salin</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+```json
+{
+    name: "CATEGORY NAME",
+    items: [
+        {
+            name: "ENDPOINT",
+            path: "/api/category/endpoint?query=",
+            desc: "Description",
+            status: "ready",
+            params: {
+                query: "Parameter query" 
+            }
+        }
+    ]
+}
 ```
 # Just add API endpoint documentation
-```html
-                <div class="api-card rounded-2xl p-6 flex flex-col lg:flex-row justify-between items-center shadow-md">
-                    <p class="text-lg font-bold mb-3 lg:mb-0 lg:mr-4 text-black-200">API ENDPOINT:</p>
-                    <div class="flex flex-col lg:flex-row items-center w-full lg:w-auto gap-3">
-                        <a id="api-endpoint" href="/api/category/endpoint?text=" class="api-endpoint text-blue-300 hover:text-gray-100 break-all text-sm px-4 py-2 rounded-lg transition-all duration-300" target="_blank">/api/category/endpoint?url=</a>
-                        <button onclick="copyUrl('api-endpoint')" class="theme-button text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105">Salin</button>
-                    </div>
-                </div>
+```json
+  {
+            name: "ENDPOINT",
+            path: "/api/category/endpoint?query=",
+            desc: "Description",
+            status: "ready",
+            params: {
+                query: "Parameter query" 
+            }
+        }
 ```
-
-**Note:** Make sure to replace `new-api-endpoint` with a unique ID and `/api/category/your-endpoint-name` with your actual API path.
 
 -----
 
