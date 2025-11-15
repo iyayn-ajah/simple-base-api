@@ -18,6 +18,10 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get('/iyah.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'iyah.json'));
+});
+
 // AI ENDPOINT
 router.get('/ai/gemini', async (req, res) => {
   const text = req.query.text;
