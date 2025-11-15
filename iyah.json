@@ -19,7 +19,7 @@
       "name": "DOWNLOADER API ENDPOINT",
       "items": [
         {
-          "name": "X DOWNLOADER",
+          "name": "VIDEY DOWNLOADER",
           "path": "/api/downloader/videy?url=",
           "desc": "Download videos from videy",
           "status": "ready",
@@ -28,7 +28,7 @@
           }
         },
         {
-          "name": "FB DOWNLOADER",
+          "name": "PIXELDRAIN DOWNLOADER",
           "path": "/api/downloader/pixeldrain?url=",
           "desc": "Download file from pixeldrain",
           "status": "ready",
