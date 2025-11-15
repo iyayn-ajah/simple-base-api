@@ -111,15 +111,15 @@ res.end(buffernya);
 # Add endpoint documentation with category
 ```json
 {
-    name: "CATEGORY NAME",
-    items: [
+    "name": "CATEGORY NAME",
+    "items": [
         {
-            name: "ENDPOINT",
-            path: "/api/category/endpoint?query=",
-            desc: "Description",
-            status: "ready",
-            params: {
-                query: "Parameter query" 
+            "name": "ENDPOINT",
+            "path": "/api/category/endpoint?query=",
+            "desc": "Description",
+            "status": "ready",
+            "params": {
+                "query": "Parameter query"
             }
         }
     ]
@@ -127,15 +127,15 @@ res.end(buffernya);
 ```
 # Just add API endpoint documentation
 ```json
-  {
-            name: "ENDPOINT",
-            path: "/api/category/endpoint?query=",
-            desc: "Description",
-            status: "ready",
-            params: {
-                query: "Parameter query" 
-            }
-        }
+ {
+    "name": "ENDPOINT",
+    "path": "/api/category/endpoint?query=",
+    "desc": "Description",
+    "status": "ready",
+    "params": {
+        "query": "Parameter query"
+    }
+}
 ```
 
 -----
