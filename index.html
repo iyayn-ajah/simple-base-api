@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -265,6 +266,30 @@
             background: rgba(200, 200, 200, 0.3);
             border: 1px solid rgba(150, 150, 150, 0.4);
         }
+        
+        /* Media preview styles */
+        .media-preview {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .media-iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            border-radius: 8px;
+        }
+        .media-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 8px;
+        }
+        .media-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body class="min-h-screen text-gray-100 antialiased">
@@ -297,8 +322,8 @@
             <div class="mb-6">
                 <img src="https://raw.githubusercontent.com/upload-file-lab/fileupload6/main/uploads/1759330984218.jpeg" alt="memek" class="w-full max-w-xs mx-auto rounded-xl shadow-xl gray-glow transform hover:scale-105 transition-all duration-500">
             </div>
-            <h1 class="text-4xl md:text-6xl font-black gray-gradient-text mb-4 leading-tight tracking-wider">REST EH PI AY</h1>
-            <p class="text-lg text-black-300 font-light tracking-wide">Kumpulan API Endpoint, ya gimana ya ya begituh.</p>
+            <h1 class="text-4xl md:text-6xl font-black gray-gradient-text mb-4 leading-tight tracking-wider">REST EH PI AY BY AFIQ</h1>
+            <p class="text-lg text-black-300 font-light tracking-wide">Kumpulan API Endpoint yang mungkin berguna.</p>
             <div class="mt-6 h-1 w-32 mx-auto bg-gradient-to-r from-gray-500 via-gray-400 to-gray-500 rounded-full"></div>
         </header>
 
@@ -329,10 +354,26 @@
 
         <!-- Social Media -->
         <section class="mt-12 pt-8 border-t border-gray-800">
+            <h2 class="text-lg font-bold gray-gradient-text mb-6 text-center">Connect with me</h2>
             <div class="flex flex-wrap justify-center gap-4">
-                <a href="https://github.com/iyayn-ajah/simple-base-api" target="_blank" class="transition-all duration-300 hover:scale-105">
+                <a href="https://t.me/AfiqAjah" target="_blank" class="transition-all duration-300 hover:scale-105">
                     <div class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 text-sm transition-colors">
-                        SOURCE CODE
+                        Telegram
+                    </div>
+                </a>
+                <a href="https://whatsapp.com/channel/0029VaoJb11LikgEpNpBty0e" target="_blank" class="transition-all duration-300 hover:scale-105">
+                    <div class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 text-sm transition-colors">
+                        WhatsApp
+                    </div>
+                </a>
+                <a href="https://www.instagram.com/rapikuzu_desu/" target="_blank" class="transition-all duration-300 hover:scale-105">
+                    <div class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 text-sm transition-colors">
+                        Instagram
+                    </div>
+                </a>
+                <a href="https://youtube.com/@rapikuzudesu" target="_blank" class="transition-all duration-300 hover:scale-105">
+                    <div class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 text-sm transition-colors">
+                        YouTube
                     </div>
                 </a>
             </div>
@@ -400,6 +441,110 @@
             icon.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
         }
 
+        // Function to determine if a URL is a media file
+        function isMediaFile(url) {
+            const mediaExtensions = [
+                // Images
+                '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico',
+                // Videos
+                '.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv',
+                // Audio
+                '.mp3', '.wav', '.ogg', '.m4a', '.flac',
+                // Documents
+                '.pdf', '.doc', '.docx', '.ppt', '.pptx', '.xls', '.xlsx'
+            ];
+            
+            return mediaExtensions.some(ext => 
+                url.toLowerCase().includes(ext) || 
+                url.toLowerCase().startsWith('data:image/') ||
+                url.toLowerCase().startsWith('data:video/') ||
+                url.toLowerCase().startsWith('data:audio/')
+            );
+        }
+
+        // Function to determine content type
+        function getContentType(url, contentType) {
+            if (contentType) {
+                if (contentType.includes('image/')) return 'image';
+                if (contentType.includes('video/')) return 'video';
+                if (contentType.includes('audio/')) return 'audio';
+                if (contentType.includes('application/pdf')) return 'pdf';
+            }
+            
+            // Fallback to URL extension
+            if (url.includes('.jpg') || url.includes('.jpeg') || url.includes('.png') || 
+                url.includes('.gif') || url.includes('.webp') || url.includes('.svg')) {
+                return 'image';
+            }
+            if (url.includes('.mp4') || url.includes('.webm') || url.includes('.ogg') || 
+                url.includes('.mov') || url.includes('.avi')) {
+                return 'video';
+            }
+            if (url.includes('.mp3') || url.includes('.wav') || url.includes('.ogg') || 
+                url.includes('.m4a')) {
+                return 'audio';
+            }
+            if (url.includes('.pdf')) return 'pdf';
+            
+            return 'unknown';
+        }
+
+        // Function to create media preview
+        function createMediaPreview(url, contentType) {
+            const type = getContentType(url, contentType);
+            let previewHtml = '';
+            
+            switch(type) {
+                case 'image':
+                    previewHtml = `
+                        <div class="media-preview">
+                            <img src="${url}" class="media-image" alt="Response Image">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'video':
+                    previewHtml = `
+                        <div class="media-preview">
+                            <video controls class="media-iframe">
+                                <source src="${url}" type="${contentType || 'video/mp4'}">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'audio':
+                    previewHtml = `
+                        <div class="media-preview">
+                            <audio controls class="w-full">
+                                <source src="${url}" type="${contentType || 'audio/mpeg'}">
+                                Your browser does not support the audio tag.
+                            </audio>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'pdf':
+                    previewHtml = `
+                        <div class="media-preview">
+                            <iframe src="${url}" class="media-iframe" frameborder="0"></iframe>                            
+                        </div>
+                    `;
+                    break;
+                    
+                default:
+                    // For other file types, use iframe
+                    previewHtml = `
+                        <div class="media-preview">
+                            <iframe src="${url}" class="media-iframe" frameborder="0"></iframe>                            
+                        </div>
+                    `;
+            }
+            
+            return previewHtml;
+        }
+
         async function executeRequest(e, catIdx, epIdx, method, path) {
             e.preventDefault();
             
@@ -427,9 +572,10 @@
             responseDiv.classList.remove('hidden');
             responseContent.innerHTML = '<div class="spinner mx-auto"></div>';
             
-            // Generate curl command
+            // Generate curl command and show it immediately
             const curlText = `curl -X ${method} "${fullPath}"`;
             curlCommand.textContent = curlText;
+            curlSection.classList.remove('hidden');
             
             isRequestInProgress = true;
             showLoading();
@@ -451,14 +597,29 @@
                 } else if (contentType?.startsWith("image/")) {
                     const blob = await response.blob();
                     const imageUrl = URL.createObjectURL(blob);
-                    responseContent.innerHTML = `<img src="${imageUrl}" class="max-w-full rounded-lg" alt="Response">`;
+                    responseContent.innerHTML = createMediaPreview(imageUrl, contentType);
+                } else if (contentType?.startsWith("video/")) {
+                    const blob = await response.blob();
+                    const videoUrl = URL.createObjectURL(blob);
+                    responseContent.innerHTML = createMediaPreview(videoUrl, contentType);
+                } else if (contentType?.startsWith("audio/")) {
+                    const blob = await response.blob();
+                    const audioUrl = URL.createObjectURL(blob);
+                    responseContent.innerHTML = createMediaPreview(audioUrl, contentType);
+                } else if (contentType?.includes("application/pdf")) {
+                    const blob = await response.blob();
+                    const pdfUrl = URL.createObjectURL(blob);
+                    responseContent.innerHTML = createMediaPreview(pdfUrl, contentType);
                 } else {
                     const text = await response.text();
-                    responseContent.innerHTML = `<pre class="code-font text-sm overflow-auto">${text}</pre>`;
+                    
+                    // Check if the response is a URL to a media file
+                    if (isMediaFile(text)) {
+                        responseContent.innerHTML = createMediaPreview(text, contentType);
+                    } else {
+                        responseContent.innerHTML = `<pre class="code-font text-sm overflow-auto">${text}</pre>`;
+                    }
                 }
-                
-                // Show curl section after successful request
-                curlSection.classList.remove('hidden');
                 
                 showToast('Request completed successfully!');
                 
@@ -602,15 +763,6 @@
                                         </button>
                                     </div>
                                 </form>
-                            </div>`;
-                    } else {
-                        html += `<div class="px-4 py-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-yellow-400 text-sm">⚠️ This endpoint is not available for testing</div>`;
-                    }
-
-                    html += `
-                            <div id="response-${catIdx}-${epIdx}" class="hidden mt-4">
-                                <h4 class="font-bold text-sm text-gray-300 mb-2">📄 Response</h4>
-                                <div class="bg-black/50 px-4 py-3 rounded-lg border border-gray-800 max-h-96 overflow-auto" id="response-content-${catIdx}-${epIdx}"></div>
                             </div>
                             
                             <div id="curl-section-${catIdx}-${epIdx}" class="hidden mt-4">
@@ -624,6 +776,16 @@
                                     <code id="curl-command-${catIdx}-${epIdx}" class="code-font text-xs text-gray-300 break-all">curl -X ${method} "${BASE_URL}${path}"</code>
                                 </div>
                             </div>
+                            
+                            <div id="response-${catIdx}-${epIdx}" class="hidden mt-4">
+                                <h4 class="font-bold text-sm text-gray-300 mb-2">📄 Response</h4>
+                                <div class="bg-black/50 px-4 py-3 rounded-lg border border-gray-800 max-h-96 overflow-auto" id="response-content-${catIdx}-${epIdx}"></div>
+                            </div>`;
+                    } else {
+                        html += `<div class="px-4 py-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-yellow-400 text-sm">⚠️ This endpoint is not available for testing</div>`;
+                    }
+
+                    html += `
                         </div>
                     </div>`;
                 });
