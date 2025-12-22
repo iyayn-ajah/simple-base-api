@@ -4,80 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EH PI AY DOANG</title>
-    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/upload-file-lab/fileupload6/main/uploads/1759330984218.jpeg?format=png&name=900x900">
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1764494355026.jpeg?format=png&name=900x900">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+        }
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --text-tertiary: #888888;
+            --border-color: #333333;
+            --scrollbar-thumb: #444444;
+            --scrollbar-track: #111111;
+            --card-bg: #111827;
+            --input-bg: #1f2937;
+            --method-badge: #374151;
+            --social-bg: #1f2937;
+            --social-text: #ffffff;
+            --social-hover: #374151;
+        }
+        .light-mode {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --bg-tertiary: #f9fafb;
+            --text-primary: #000000;
+            --text-secondary: #374151;
+            --text-tertiary: #6b7280;
+            --border-color: #d1d5db;
+            --scrollbar-thumb: #cbd5e0;
+            --scrollbar-track: #f3f4f6;
+            --card-bg: #ffffff;
+            --input-bg: #f9fafb;
+            --method-badge: #e5e7eb;
+            --social-bg: #f3f4f6;
+            --social-text: #374151;
+            --social-hover: #e5e7eb;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        /* Custom scrollbar */
+        * {
             scrollbar-width: thin;
-            scrollbar-color: #666 #1a1a1a;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
         }
         *::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         *::-webkit-scrollbar-track {
-            background: #1a1a1a;
+            background: var(--scrollbar-track);
         }
         *::-webkit-scrollbar-thumb {
-            background: #666;
-            border-radius: 4px;
+            background: var(--scrollbar-thumb);
+            border-radius: 10px;
         }
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            color: #f0f0f0;
+        *::-webkit-scrollbar-thumb:hover {
+            background: var(--text-tertiary);
         }
-        .code-font {
-            font-family: 'JetBrains Mono', monospace;
+        
+        /* Card hover effect */
+        .card-hover {
+            transition: all 0.3s ease-in-out;
         }
-        .glow-card {
-            background: linear-gradient(135deg, rgba(30, 30, 30, 0.9) 0%, rgba(20, 20, 20, 0.95) 100%);
-            border: 1px solid rgba(100, 100, 100, 0.2);
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Theme toggle button */
+        .theme-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
         }
-        .glow-card:hover {
-            border-color: rgba(100, 100, 100, 0.5);
-            box-shadow: 0 0 30px rgba(100, 100, 100, 0.15);
+        
+        .theme-toggle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
-        .gradient-border {
-            position: relative;
-            background: #1a1a1a;
-        }
-        .gradient-border::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            padding: 2px;
-            background: linear-gradient(135deg, #666, #555, #444);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-        }
-        .pill-tag {
-            background: rgba(100, 100, 100, 0.15);
-            border: 1px solid rgba(100, 100, 100, 0.4);
-            backdrop-filter: blur(10px);
-        }
-        .search-glow {
-            box-shadow: 0 0 20px rgba(100, 100, 100, 0.1);
-        }
-        .search-glow:focus {
-            box-shadow: 0 0 30px rgba(100, 100, 100, 0.3);
-        }
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        .notification-dot {
-            animation: pulse-glow 2s ease-in-out infinite;
-        }
-        .endpoint-badge {
-            background: linear-gradient(135deg, #666 0%, #444 100%);
-            font-weight: 700;
-            letter-spacing: 0.05em;
-        }
+        
+        /* Loading overlay */
         .loading-overlay {
             display: none;
             position: fixed;
@@ -86,184 +117,68 @@
             backdrop-filter: blur(5px);
             z-index: 9999;
         }
+        
+        .light-mode .loading-overlay {
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
         .loading-overlay.active {
             display: flex;
         }
+        
         .spinner {
             width: 50px;
             height: 50px;
             border: 3px solid rgba(100, 100, 100, 0.3);
-            border-top-color: #666;
+            border-top-color: var(--text-tertiary);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
+        /* Toast notification */
         .toast {
             position: fixed;
             top: 24px;
             right: 24px;
-            background: rgba(20, 20, 20, 0.95);
-            border: 1px solid rgba(100, 100, 100, 0.4);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             padding: 16px 20px;
             border-radius: 12px;
-            color: #fff;
+            color: var(--text-primary);
             z-index: 10000;
             transform: translateX(400px);
             transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             backdrop-filter: blur(10px);
+            opacity: 0.95;
         }
+        
         .toast.show {
             transform: translateX(0);
         }
-        .gray-gradient-text {
-            background: linear-gradient(-45deg, #fff, #ccc, #999, #666);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .theme-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
+        
+        /* Social badge */
+        .social-badge {
             transition: all 0.3s ease;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .theme-toggle:hover {
-            transform: scale(1.1);
+            background: var(--social-bg);
+            color: var(--social-text);
         }
         
-        /* Light Mode Styles */
-        body.wb-theme {
-            --text-color: #333;
-            --bg-gradient-from: #fff;
-            --bg-gradient-via: #eee;
-            --bg-gradient-to: #fff;
-            background: linear-gradient(135deg, #fff 0%, #eee 100%);
-            color: #333;
+        .social-badge:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+            background: var(--social-hover);
         }
         
-        /* Ensure all text is black in light mode */
-        body.wb-theme,
-        body.wb-theme * {
-            color: #333 !important;
-        }
-        
-        /* Specific text elements that need to be black in light mode */
-        body.wb-theme .text-gray-100,
-        body.wb-theme .text-gray-200,
-        body.wb-theme .text-gray-300,
-        body.wb-theme .text-gray-400,
-        body.wb-theme .text-gray-500,
-        body.wb-theme .text-gray-600,
-        body.wb-theme .text-gray-700,
-        body.wb-theme .text-gray-800,
-        body.wb-theme .text-gray-900 {
-            color: #333 !important;
-        }
-        
-        body.wb-theme .glow-card {
-            background: linear-gradient(135deg, rgba(240, 240, 240, 0.9) 0%, rgba(220, 220, 220, 0.95) 100%);
-            border: 1px solid rgba(200, 200, 200, 0.2);
-        }
-        body.wb-theme .glow-card:hover {
-            border-color: rgba(200, 200, 200, 0.5);
-            box-shadow: 0 0 30px rgba(200, 200, 200, 0.15);
-        }
-        body.wb-theme .gray-gradient-text {
-            background: linear-gradient(-45deg, #333, #555, #777, #999);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        /* Light mode scrollbar */
-        body.wb-theme * {
-            scrollbar-color: #999 #e0e0e0;
-        }
-        body.wb-theme *::-webkit-scrollbar-track {
-            background: #e0e0e0;
-        }
-        body.wb-theme *::-webkit-scrollbar-thumb {
-            background: #999;
-        }
-        
-        /* Light mode form elements */
-        body.wb-theme input,
-        body.wb-theme textarea,
-        body.wb-theme select {
-            color: #333 !important;
-            background-color: #f5f5f5 !important;
-            border-color: #ccc !important;
-        }
-        
-        body.wb-theme input::placeholder {
-            color: #777 !important;
-        }
-        
-        /* Light mode buttons */
-        body.wb-theme button {
-            color: #333 !important;
-        }
-        
-        /* Light mode toast */
-        body.wb-theme .toast {
-            background: rgba(240, 240, 240, 0.95);
-            border: 1px solid rgba(200, 200, 200, 0.4);
-            color: #333;
-        }
-        
-        /* Light mode loading overlay */
-        body.wb-theme .loading-overlay {
-            background: rgba(240, 240, 240, 0.9);
-        }
-        body.wb-theme .loading-overlay p {
-            color: #333 !important;
-        }
-        
-        /* Light mode social media links */
-        body.wb-theme .bg-gray-800,
-        body.wb-theme .bg-gray-700 {
-            background-color: #e0e0e0 !important;
-            color: #333 !important;
-        }
-        body.wb-theme .hover\:bg-gray-700:hover {
-            background-color: #d0d0d0 !important;
-        }
-        
-        /* Light mode borders */
-        body.wb-theme .border-gray-800 {
-            border-color: #ccc !important;
-        }
-        
-        /* Light mode code blocks */
-        body.wb-theme .bg-black\/50 {
-            background-color: rgba(240, 240, 240, 0.8) !important;
-        }
-        body.wb-theme .bg-gray-900\/50 {
-            background-color: rgba(220, 220, 220, 0.8) !important;
-        }
-        
-        /* Light mode endpoint badges */
-        body.wb-theme .endpoint-badge {
-            background: linear-gradient(135deg, #999 0%, #777 100%);
-            color: white !important;
-        }
-        
-        /* Light mode pill tags */
-        body.wb-theme .pill-tag {
-            background: rgba(200, 200, 200, 0.3);
-            border: 1px solid rgba(150, 150, 150, 0.4);
+        /* Audio player */
+        audio {
+            border-radius: 30px;
+            padding: 5px;
+            width: 100%;
+            background: var(--input-bg);
         }
         
         /* Media preview styles */
@@ -284,19 +199,87 @@
             max-height: 400px;
             border-radius: 8px;
         }
-        .media-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
+        
+        /* Gray gradient text */
+        .gray-gradient-text {
+            background: linear-gradient(-45deg, var(--text-primary), var(--text-secondary), var(--text-tertiary), #666666);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 300% 300%;
+            animation: gradient 3s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Code font */
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Search input */
+        .search-input {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-tertiary);
+        }
+        
+        /* Method badge */
+        .method-badge {
+            background: var(--method-badge);
+            color: var(--text-primary);
+        }
+        
+        /* Status badges */
+        .status-ready {
+            background: rgba(34, 197, 94, 0.2);
+            color: rgb(34, 197, 94);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+        
+        .status-update {
+            background: rgba(234, 179, 8, 0.2);
+            color: rgb(234, 179, 8);
+            border: 1px solid rgba(234, 179, 8, 0.4);
+        }
+        
+        .status-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: rgb(239, 68, 68);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+        
+        .status-warning {
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            color: var(--text-secondary);
+        }
+        
+        /* Fade in animation */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="min-h-screen text-gray-100 antialiased">
+<body class="min-h-screen antialiased">
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay items-center justify-center">
         <div class="text-center">
             <div class="spinner mx-auto mb-4"></div>
-            <p class="text-gray-300 font-semibold">Processing...</p>
+            <p class="font-semibold">Processing...</p>
         </div>
     </div>
 
@@ -304,38 +287,45 @@
     <div id="toast" class="toast">
         <div class="flex items-center gap-3">
             <svg id="toastIcon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                <path fill-rule="evenodd" d="M10 18a8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
             </svg>
             <span id="toastMessage" class="font-medium">Action completed</span>
         </div>
     </div>
 
-    <!-- Theme Toggle -->
-    <div class="theme-toggle" id="themeToggle">
-        <span id="themeIcon" class="text-xl">🌙</span>
-    </div>
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle-btn">
+        <!-- Moon icon (dark mode) -->
+        <svg id="theme-toggle-dark-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+        </svg>
+        <!-- Sun icon (light mode) -->
+        <svg id="theme-toggle-light-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+        </svg>
+    </button>
 
     <div class="max-w-5xl mx-auto px-4 py-8">
         <!-- Header -->
-        <header class="mb-8">
-            <div class="mb-6">
-                <img src="https://raw.githubusercontent.com/upload-file-lab/fileupload6/main/uploads/1759330984218.jpeg" alt="memek" class="w-full max-w-xs mx-auto rounded-xl shadow-xl gray-glow transform hover:scale-105 transition-all duration-500">
+        <header id="api" class="mb-12">
+            <div class="mb-6 flex justify-center">
+                <img src="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1764494355026.jpeg" alt="Logo" class="w-full max-w-sm rounded-xl shadow-xl hover:scale-105 transition-all duration-300">
             </div>
-            <h1 class="text-4xl md:text-6xl font-black gray-gradient-text mb-4 leading-tight tracking-wider">REST EH PI AY BY AFIQ</h1>
-            <p class="text-lg text-black-300 font-light tracking-wide">Kumpulan API Endpoint yang mungkin berguna.</p>
+            <h1 class="text-4xl md:text-6xl font-black mb-4 leading-tight tracking-wider text-center gray-gradient-text">REST EH PI AY BY SHIKAKU IYAYN</h1>
+            <p class="text-lg font-light tracking-wide text-center text-gray-300 light-mode:text-gray-600">Kumpulan API Endpoint yang mungkin berguna.</p>
             <div class="mt-6 h-1 w-32 mx-auto bg-gradient-to-r from-gray-500 via-gray-400 to-gray-500 rounded-full"></div>
         </header>
 
         <!-- Search -->
-        <div class="mb-6">
+        <div class="mb-8">
             <div class="relative">
                 <input 
                     type="text" 
                     id="searchInput" 
                     placeholder="Search endpoints by name, path, or category..."
-                    class="w-full px-4 py-2.5 text-sm bg-gray-900/50 border border-gray-800 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:border-gray-500 search-glow transition-all code-font"
+                    class="search-input w-full px-4 py-3 text-sm rounded-lg focus:outline-none focus:border-blue-500 transition-all code-font"
                 >
-                <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
             </div>
@@ -344,35 +334,124 @@
         <!-- No Results -->
         <div id="noResults" class="text-center py-12 hidden">
             <div class="text-4xl mb-2">🔍</div>
-            <h3 class="text-sm font-bold text-gray-400 mb-1">No endpoints found</h3>
-            <p class="text-xs text-gray-500">Try a different search term</p>
+            <h3 class="text-sm font-bold mb-1">No endpoints found</h3>
+            <p class="text-xs">Try a different search term</p>
         </div>
 
         <!-- API List -->
-        <div id="apiList" class="space-y-3"></div>
+        <div id="apiList" class="space-y-4"></div>
 
-        <!-- Social Media -->
-        <section class="mt-12 pt-8 border-t border-gray-800">
-            <h2 class="text-lg font-bold gray-gradient-text mb-6 text-center">Source code:</h2>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="https://github.com/iyayn-ajah/simple-base-api" target="_blank" class="transition-all duration-300 hover:scale-105">
-                    <div class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 text-sm transition-colors">
-                        SOURCE CODE
+        <!-- Social Media Section -->
+        <section id="social" class="mt-12 pt-8 border-t border-gray-700 light-mode:border-gray-300">
+            <h2 class="text-lg font-bold mb-6 text-center gray-gradient-text">Connect with me</h2>
+            <div id="socialContainer" class="flex flex-wrap justify-center gap-3">
+                <a href="https://t.me/AfiqAjah" target="_blank" class="social-badge">
+                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
+                        Telegram
+                    </div>
+                </a>
+                <a href="https://whatsapp.com/channel/0029VaoJb11LikgEpNpBty0e" target="_blank" class="social-badge">
+                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
+                        WhatsApp
+                    </div>
+                </a>
+                <a href="https://www.instagram.com/iyayn_ajah/" target="_blank" class="social-badge">
+                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
+                        Instagram
+                    </div>
+                </a>
+                <a href="https://youtube.com/@rapikuzudesu" target="_blank" class="social-badge">
+                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
+                        YouTube
                     </div>
                 </a>
             </div>
         </section>
 
         <!-- Footer -->
-        <footer class="mt-12 pt-6 border-t border-gray-800 text-center text-gray-500 text-xs">
-            © 2025 RAPIKUZU DESUWA
+        <footer class="mt-12 pt-6 border-t border-gray-700 light-mode:border-gray-300 text-center text-xs">
+            © 2025 IYAYN AJAH
         </footer>
     </div>
 
     <script>
         const BASE_URL = window.location.origin;
         let isRequestInProgress = false;
-        let apiData = null; // will be loaded from apis.json
+        let apiData = null;
+        let currentTheme = 'dark';
+        let allApiElements = [];
+
+        // Fungsi tema
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const body = document.body;
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            currentTheme = savedTheme;
+            
+            if (savedTheme === 'light') {
+                body.classList.add('light-mode');
+                themeToggleDarkIcon.classList.add('hidden');
+                themeToggleLightIcon.classList.remove('hidden');
+                console.log('Light mode activated');
+            } else {
+                body.classList.remove('light-mode');
+                themeToggleDarkIcon.classList.remove('hidden');
+                themeToggleLightIcon.classList.add('hidden');
+                console.log('Dark mode activated');
+            }
+            
+            // Update social media badges immediately
+            updateSocialBadges();
+        }
+
+        function toggleTheme() {
+            if (body.classList.contains('light-mode')) {
+                // Switch to dark mode
+                body.classList.remove('light-mode');
+                themeToggleDarkIcon.classList.remove('hidden');
+                themeToggleLightIcon.classList.add('hidden');
+                currentTheme = 'dark';
+                console.log('Switched to dark mode');
+            } else {
+                // Switch to light mode
+                body.classList.add('light-mode');
+                themeToggleDarkIcon.classList.add('hidden');
+                themeToggleLightIcon.classList.remove('hidden');
+                currentTheme = 'light';
+                console.log('Switched to light mode');
+            }
+            
+            localStorage.setItem('theme', currentTheme);
+            
+            // Update social media badges
+            updateSocialBadges();
+            
+            // Muat ulang API dengan tema yang sesuai
+            if (apiData) {
+                loadApis();
+            }
+        }
+
+        // Function to update social badges based on theme
+        function updateSocialBadges() {
+            const isLightMode = body.classList.contains('light-mode');
+            const socialBadges = document.querySelectorAll('.social-badge > div');
+            
+            socialBadges.forEach(badge => {
+                // Clear previous classes
+                badge.className = 'px-4 py-2 rounded-lg text-sm transition-colors';
+                
+                // Add theme-specific classes
+                if (isLightMode) {
+                    badge.classList.add('bg-gray-100', 'text-gray-800', 'hover:bg-gray-200');
+                } else {
+                    badge.classList.add('bg-gray-800', 'text-gray-300', 'hover:bg-gray-700');
+                }
+            });
+        }
 
         function showLoading() {
             document.getElementById('loadingOverlay').classList.add('active');
@@ -391,12 +470,8 @@
             
             if (isError) {
                 toastIcon.innerHTML = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>';
-                toastIcon.classList.add('text-red-500');
-                toastIcon.classList.remove('text-green-500');
             } else {
                 toastIcon.innerHTML = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>';
-                toastIcon.classList.add('text-green-500');
-                toastIcon.classList.remove('text-red-500');
             }
             
             toast.classList.add('show');
@@ -428,13 +503,9 @@
         // Function to determine if a URL is a media file
         function isMediaFile(url) {
             const mediaExtensions = [
-                // Images
                 '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico',
-                // Videos
                 '.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv',
-                // Audio
                 '.mp3', '.wav', '.ogg', '.m4a', '.flac',
-                // Documents
                 '.pdf', '.doc', '.docx', '.ppt', '.pptx', '.xls', '.xlsx'
             ];
             
@@ -455,7 +526,6 @@
                 if (contentType.includes('application/pdf')) return 'pdf';
             }
             
-            // Fallback to URL extension
             if (url.includes('.jpg') || url.includes('.jpeg') || url.includes('.png') || 
                 url.includes('.gif') || url.includes('.webp') || url.includes('.svg')) {
                 return 'image';
@@ -518,7 +588,6 @@
                     break;
                     
                 default:
-                    // For other file types, use iframe
                     previewHtml = `
                         <div class="media-preview">
                             <iframe src="${url}" class="media-iframe" frameborder="0"></iframe>                            
@@ -556,7 +625,6 @@
             responseDiv.classList.remove('hidden');
             responseContent.innerHTML = '<div class="spinner mx-auto"></div>';
             
-            // Generate curl command and show it immediately
             const curlText = `curl -X ${method} "${fullPath}"`;
             curlCommand.textContent = curlText;
             curlSection.classList.remove('hidden');
@@ -597,7 +665,6 @@
                 } else {
                     const text = await response.text();
                     
-                    // Check if the response is a URL to a media file
                     if (isMediaFile(text)) {
                         responseContent.innerHTML = createMediaPreview(text, contentType);
                     } else {
@@ -630,24 +697,26 @@
         function loadApis() {
             const apiList = document.getElementById('apiList');
             if (!apiData || !apiData.categories) {
-                apiList.innerHTML = '<p class="text-center text-gray-400">No API data loaded.</p>';
+                apiList.innerHTML = '<p class="text-center">No API data loaded.</p>';
                 return;
             }
+            
+            const isLightMode = body.classList.contains('light-mode');
             
             let html = '';
             apiData.categories.forEach((category, catIdx) => {
                 html += `
-                <div class="category-group" data-category="${category.name}">
-                    <div class="glow-card rounded-xl overflow-hidden">
-                        <button onclick="toggleCategory(${catIdx})" class="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-800/50 transition-colors">
+                <div class="category-group fade-in" data-category="${category.name.toLowerCase()}">
+                    <div class="${isLightMode ? 'bg-white border-gray-300' : 'bg-gray-900 border-gray-700'} border rounded-xl overflow-hidden card-hover">
+                        <button onclick="toggleCategory(${catIdx})" class="w-full px-4 py-3 flex items-center justify-between ${isLightMode ? 'hover:bg-gray-100' : 'hover:bg-gray-800'} transition-colors">
                             <div class="flex items-center gap-3">
                                 <span class="text-lg">📁</span>
                                 <div class="text-left">
                                     <h3 class="font-bold text-sm gray-gradient-text">${category.name}</h3>
-                                    <p class="text-xs text-gray-500">${category.items.length} endpoints</p>
+                                    <p class="text-xs ${isLightMode ? 'text-gray-600' : 'text-gray-400'}">${category.items.length} endpoints</p>
                                 </div>
                             </div>
-                            <svg id="cat-icon-${catIdx}" class="w-4 h-4 text-gray-500 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg id="cat-icon-${catIdx}" class="w-4 h-4 ${isLightMode ? 'text-gray-600' : 'text-gray-400'} transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
@@ -660,60 +729,57 @@
                     const path = pathParts[0];
                     const queryParams = new URLSearchParams(pathParts[1] || '');
 
-                    const statusColors = {
-                        'ready': 'bg-green-500/20 text-green-400 border-green-500/40',
-                        'update': 'bg-yellow-500/20 text-yellow-400 border-yellow-500/40', 
-                        'error': 'bg-red-500/20 text-red-400 border-red-500/40'
-                    };
-                    const statusClass = statusColors[item.status] || statusColors.ready;
+                    let statusClass = 'status-ready';
+                    if (item.status === 'update') statusClass = 'status-update';
+                    if (item.status === 'error') statusClass = 'status-error';
 
                     html += `
-                    <div class="border-t border-gray-800 api-item" 
+                    <div class="api-item border-t ${isLightMode ? 'border-gray-300' : 'border-gray-700'}" 
                         data-method="${method}"
                         data-path="${path}"
-                        data-alias="${item.name}"
-                        data-description="${item.desc}"
-                        data-category="${category.name}">
-                        <button onclick="toggleEndpoint(${catIdx}, ${epIdx})" class="w-full px-4 py-2.5 flex items-center justify-between hover:bg-gray-800/50 transition-colors">
+                        data-alias="${item.name.toLowerCase()}"
+                        data-description="${item.desc.toLowerCase()}"
+                        data-category="${category.name.toLowerCase()}">
+                        <button onclick="toggleEndpoint(${catIdx}, ${epIdx})" class="w-full px-4 py-2.5 flex items-center justify-between ${isLightMode ? 'hover:bg-gray-100' : 'hover:bg-gray-800'} transition-colors">
                             <div class="flex items-center gap-3 flex-1 min-w-0">
-                                <span class="endpoint-badge px-2 py-0.5 rounded text-[10px] text-white flex-shrink-0">${method}</span>
+                                <span class="${isLightMode ? 'bg-gray-200 text-gray-800' : 'bg-gray-700 text-white'} px-2 py-0.5 rounded text-[10px] flex-shrink-0">${method}</span>
                                 <div class="text-left flex-1 min-w-0">
-                                    <p class="code-font font-semibold text-xs text-gray-200 truncate">${path}</p>
+                                    <p class="code-font font-semibold text-xs truncate">${path}</p>
                                     <div class="flex items-center gap-2 mt-0.5">
-                                        <p class="text-xs text-gray-400 truncate">${item.name}</p>
-                                        <span class="pill-tag px-1.5 py-0.5 text-[10px] rounded-full ${statusClass} flex-shrink-0">${item.status || 'ready'}</span>
+                                        <p class="text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'} truncate">${item.name}</p>
+                                        <span class="px-1.5 py-0.5 text-[10px] rounded-full ${statusClass} flex-shrink-0">${item.status || 'ready'}</span>
                                     </div>
                                 </div>
                             </div>
-                            <svg id="ep-icon-${catIdx}-${epIdx}" class="w-4 h-4 text-gray-500 transition-transform duration-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg id="ep-icon-${catIdx}-${epIdx}" class="w-4 h-4 ${isLightMode ? 'text-gray-600' : 'text-gray-400'} transition-transform duration-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
                         
-                        <div id="ep-${catIdx}-${epIdx}" class="hidden bg-gray-900/30 px-4 py-3 border-t border-gray-800">
-                            <p class="text-gray-400 mb-3 text-xs">${item.desc}</p>
+                        <div id="ep-${catIdx}-${epIdx}" class="hidden ${isLightMode ? 'bg-gray-100' : 'bg-gray-800/30'} px-4 py-3 border-t ${isLightMode ? 'border-gray-300' : 'border-gray-700'}">
+                            <p class="${isLightMode ? 'text-gray-700' : 'text-gray-300'} mb-3 text-xs">${item.desc}</p>
                             
                             <div class="mb-3">
                                 <div class="flex items-center justify-between mb-1.5">
-                                    <h4 class="font-bold text-xs text-gray-300">🔗 Endpoint</h4>
+                                    <h4 class="font-bold text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'}">🔗 Endpoint</h4>
                                     <div class="flex gap-2">
-                                        <button onclick="copyText('${path}', 'Path')" class="px-2 py-1 bg-gray-800 hover:bg-gray-700 rounded text-[10px] text-gray-300 transition-colors">
+                                        <button onclick="copyText('${path}', 'Path')" class="px-2 py-1 ${isLightMode ? 'bg-gray-200 hover:bg-gray-300' : 'bg-gray-800 hover:bg-gray-700'} rounded text-[10px] transition-colors">
                                             Copy Path
                                         </button>
-                                        <button onclick="copyText('${BASE_URL}${path}', 'URL')" class="px-2 py-1 bg-gray-800 hover:bg-gray-700 rounded text-[10px] text-gray-300 transition-colors">
+                                        <button onclick="copyText('${BASE_URL}${path}', 'URL')" class="px-2 py-1 ${isLightMode ? 'bg-gray-200 hover:bg-gray-300' : 'bg-gray-800 hover:bg-gray-700'} rounded text-[10px] transition-colors">
                                             Copy Full URL
                                         </button>
                                     </div>
                                 </div>
-                                <div class="bg-black/50 px-3 py-2 rounded-lg border border-gray-800">
-                                    <code class="code-font text-xs text-gray-300">${path}</code>
+                                <div class="${isLightMode ? 'bg-gray-200 border-gray-300' : 'bg-gray-900/50 border-gray-700'} border px-3 py-2 rounded-lg">
+                                    <code class="code-font text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'}">${path}</code>
                                 </div>
                             </div>`;
 
                     if (item.status === 'ready') {
                         html += `
                             <div>
-                                <h4 class="font-bold text-sm text-gray-300 mb-3">⚡ Try it out</h4>
+                                <h4 class="font-bold text-sm ${isLightMode ? 'text-gray-700' : 'text-gray-300'} mb-3">⚡ Try it out</h4>
                                 <form id="form-${catIdx}-${epIdx}" onsubmit="executeRequest(event, ${catIdx}, ${epIdx}, '${method}', '${path}')">
                                     <div class="space-y-3 mb-4">`;
                         
@@ -722,13 +788,13 @@
                                 const isRequired = !queryParams.has(paramName) || queryParams.get(paramName) === '';
                                 html += `
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-400 mb-2">
+                                        <label class="block text-sm font-medium ${isLightMode ? 'text-gray-700' : 'text-gray-300'} mb-2">
                                             ${paramName} ${isRequired ? '<span class="text-red-500">*</span>' : ''}
                                         </label>
                                         <input 
                                             type="text" 
                                             name="${paramName}" 
-                                            class="w-full px-4 py-2 bg-black/50 border border-gray-800 rounded-lg text-gray-300 placeholder-gray-600 focus:outline-none focus:border-gray-500 code-font text-sm" 
+                                            class="search-input w-full px-4 py-2 rounded-lg focus:outline-none focus:border-blue-500 code-font text-sm" 
                                             placeholder="${item.params[paramName]}" 
                                             ${isRequired ? 'required' : ''}
                                         >
@@ -739,10 +805,10 @@
                         html += `
                                     </div>
                                     <div class="flex gap-3 flex-wrap">
-                                        <button type="submit" class="px-6 py-2 bg-gradient-to-r from-gray-600 to-gray-500 hover:from-gray-500 hover:to-gray-600 rounded-lg text-white font-semibold text-sm transition-all">
+                                        <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-sm transition-all">
                                             Execute
                                         </button>
-                                        <button type="button" onclick="clearResponse(${catIdx}, ${epIdx})" class="px-6 py-2 bg-gray-800/50 hover:bg-gray-800 border border-gray-700 rounded-lg text-gray-400 font-semibold text-sm transition-colors">
+                                        <button type="button" onclick="clearResponse(${catIdx}, ${epIdx})" class="px-6 py-2 ${isLightMode ? 'bg-gray-300 hover:bg-gray-400 border-gray-400' : 'bg-gray-700 hover:bg-gray-600 border-gray-600'} border rounded-lg font-semibold text-sm transition-colors">
                                             Clear
                                         </button>
                                     </div>
@@ -751,22 +817,22 @@
                             
                             <div id="curl-section-${catIdx}-${epIdx}" class="hidden mt-4">
                                 <div class="flex items-center justify-between mb-1.5">
-                                    <h4 class="font-bold text-xs text-gray-300">📟 cURL Command</h4>
-                                    <button onclick="copyText(document.getElementById('curl-command-${catIdx}-${epIdx}').textContent, 'cURL')" class="px-2 py-1 bg-gray-800 hover:bg-gray-700 rounded text-[10px] text-gray-300 transition-colors">
+                                    <h4 class="font-bold text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'}">📟 cURL Command</h4>
+                                    <button onclick="copyText(document.getElementById('curl-command-${catIdx}-${epIdx}').textContent, 'cURL')" class="px-2 py-1 ${isLightMode ? 'bg-gray-200 hover:bg-gray-300' : 'bg-gray-800 hover:bg-gray-700'} rounded text-[10px] transition-colors">
                                         Copy cURL
                                     </button>
                                 </div>
-                                <div class="bg-black/50 px-3 py-2 rounded-lg border border-gray-800">
-                                    <code id="curl-command-${catIdx}-${epIdx}" class="code-font text-xs text-gray-300 break-all">curl -X ${method} "${BASE_URL}${path}"</code>
+                                <div class="${isLightMode ? 'bg-gray-200 border-gray-300' : 'bg-gray-900/50 border-gray-700'} border px-3 py-2 rounded-lg">
+                                    <code id="curl-command-${catIdx}-${epIdx}" class="code-font text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'} break-all">curl -X ${method} "${BASE_URL}${path}"</code>
                                 </div>
                             </div>
                             
                             <div id="response-${catIdx}-${epIdx}" class="hidden mt-4">
-                                <h4 class="font-bold text-sm text-gray-300 mb-2">📄 Response</h4>
-                                <div class="bg-black/50 px-4 py-3 rounded-lg border border-gray-800 max-h-96 overflow-auto" id="response-content-${catIdx}-${epIdx}"></div>
+                                <h4 class="font-bold text-sm ${isLightMode ? 'text-gray-700' : 'text-gray-300'} mb-2">📄 Response</h4>
+                                <div class="${isLightMode ? 'bg-gray-200 border-gray-300' : 'bg-gray-900/50 border-gray-700'} border px-4 py-3 rounded-lg max-h-96 overflow-auto" id="response-content-${catIdx}-${epIdx}"></div>
                             </div>`;
                     } else {
-                        html += `<div class="px-4 py-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-yellow-400 text-sm">⚠️ This endpoint is not available for testing</div>`;
+                        html += `<div class="px-4 py-3 status-warning border rounded-lg text-sm">⚠️ This endpoint is not available for testing</div>`;
                     }
 
                     html += `
@@ -778,96 +844,149 @@
             });
             
             apiList.innerHTML = html;
+            
+            // Simpan semua elemen API untuk pencarian
+            allApiElements = Array.from(document.querySelectorAll('.api-item'));
         }
 
-        document.getElementById('searchInput').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase().trim();
-            const apiList = document.getElementById('apiList');
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
             const noResults = document.getElementById('noResults');
 
+            // Jika search kosong, tampilkan semua
             if (searchTerm === '') {
-                loadApis();
+                document.querySelectorAll('.category-group').forEach(cat => {
+                    cat.classList.remove('hidden');
+                    cat.querySelectorAll('.api-item').forEach(item => {
+                        item.classList.remove('hidden');
+                    });
+                });
                 noResults.classList.add('hidden');
                 return;
             }
 
-            const items = document.querySelectorAll('.api-item');
-            let matchCount = 0;
+            let hasVisibleItems = false;
 
-            items.forEach(item => {
-                const path = item.dataset.path.toLowerCase();
-                const alias = item.dataset.alias.toLowerCase();
-                const desc = item.dataset.description.toLowerCase();
-                const category = item.dataset.category.toLowerCase();
+            // Loop melalui semua kategori
+            document.querySelectorAll('.category-group').forEach(category => {
+                let categoryHasVisibleItems = false;
+                
+                // Loop melalui semua item API dalam kategori
+                category.querySelectorAll('.api-item').forEach(item => {
+                    const path = item.dataset.path.toLowerCase();
+                    const alias = item.dataset.alias;
+                    const desc = item.dataset.description;
+                    const categoryName = item.dataset.category;
 
-                const matches = path.includes(searchTerm) || 
-                               alias.includes(searchTerm) || 
-                               desc.includes(searchTerm) ||
-                               category.includes(searchTerm);
+                    // Cek apakah ada yang cocok dengan search term
+                    const matches = 
+                        path.includes(searchTerm) || 
+                        alias.includes(searchTerm) || 
+                        desc.includes(searchTerm) ||
+                        categoryName.includes(searchTerm);
 
-                if (matches) {
-                    item.classList.remove('hidden');
-                    matchCount++;
+                    if (matches) {
+                        item.classList.remove('hidden');
+                        categoryHasVisibleItems = true;
+                        hasVisibleItems = true;
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+
+                // Tampilkan/sembunyikan kategori berdasarkan apakah ada item yang visible
+                if (categoryHasVisibleItems) {
+                    category.classList.remove('hidden');
                 } else {
-                    item.classList.add('hidden');
+                    category.classList.add('hidden');
                 }
             });
 
-            document.querySelectorAll('.category-group').forEach(cat => {
-                const visibleItems = cat.querySelectorAll('.api-item:not(.hidden)');
-                if (visibleItems.length === 0) {
-                    cat.classList.add('hidden');
-                } else {
-                    cat.classList.remove('hidden');
-                }
-            });
-
-            if (matchCount === 0) {
-                noResults.classList.remove('hidden');
-            } else {
+            // Tampilkan/sembunyikan pesan "no results"
+            if (hasVisibleItems) {
                 noResults.classList.add('hidden');
+            } else {
+                noResults.classList.remove('hidden');
             }
-        });
-
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        const body = document.body;
-
-        const savedTheme = localStorage.getItem('theme') || 'bw-theme';
-        
-        if (savedTheme === 'wb-theme') {
-            body.classList.add('wb-theme');
-            themeIcon.textContent = '☀️';
         }
 
-        themeToggle.addEventListener('click', () => {
-            if (body.classList.contains('wb-theme')) {
-                body.classList.remove('wb-theme');
-                themeIcon.textContent = '🌙';
-                localStorage.setItem('theme', 'bw-theme');
-            } else {
-                body.classList.add('wb-theme');
-                themeIcon.textContent = '☀️';
-                localStorage.setItem('theme', 'wb-theme');
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
+        // Initialize theme - HARUS dipanggil di DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing theme...');
+            initTheme();
+            
+            // Load API data
             fetch('iyah.json')
                 .then(res => {
-                    if (!res.ok) throw new Error('Failed to load apis.json');
+                    if (!res.ok) throw new Error('Failed to load iyah.json');
                     return res.json();
                 })
                 .then(data => {
                     apiData = data;
+                    console.log('API data loaded successfully:', data.categories.length, 'categories');
                     loadApis();
                 })
                 .catch(err => {
-                    console.error(err);
+                    console.error('Error loading API data:', err);
                     const apiList = document.getElementById('apiList');
-                    apiList.innerHTML = '<p class="text-center text-red-400">Gagal memuat data API. Cek iyah.json di server.</p>';
+                    apiList.innerHTML = `
+                        <div class="text-center p-8 bg-red-900/20 border border-red-700 rounded-lg">
+                            <div class="text-4xl mb-4">⚠️</div>
+                            <h3 class="font-bold text-lg mb-2">Failed to load API data</h3>
+                            <p class="text-sm">Please check if iyah.json exists on the server</p>
+                            <p class="text-xs mt-4 text-gray-400">Error: ${err.message}</p>
+                        </div>
+                    `;
                 });
+        });
+
+        // Add event listeners
+        themeToggleBtn.addEventListener('click', toggleTheme);
+
+        // Search functionality with debounce
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(performSearch, 300);
+        });
+
+        // Add keyboard shortcut for search (Ctrl/Cmd + K)
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+
+        // Smooth scroll untuk anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add click event to clear search when clicking outside
+        document.addEventListener('click', function(event) {
+            const searchInput = document.getElementById('searchInput');
+            const searchContainer = document.querySelector('.relative');
+            
+            if (!searchContainer.contains(event.target)) {
+                // Kosongkan search jika klik di luar
+                if (searchInput.value.trim() === '') {
+                    performSearch();
+                }
+            }
         });
     </script>
 </body>
