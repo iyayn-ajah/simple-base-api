@@ -3,6 +3,9 @@ let isRequestInProgress = false;
 let apiData = null;
 let currentTheme = 'dark';
 let allApiElements = [];
+let totalEndpoints = 0;
+let totalCategories = 0;
+let batteryMonitor = null;
 
 // Fungsi tema
 const themeToggleBtn = document.getElementById('themeToggle');
@@ -74,6 +77,205 @@ function updateSocialBadges() {
             badge.classList.add('bg-gray-800', 'text-gray-300', 'hover:bg-gray-700');
         }
     });
+}
+
+// Fungsi untuk mendeteksi dan menampilkan baterai pengguna secara real
+function initBatteryDetection() {
+    const batteryLevelElement = document.getElementById('batteryLevel');
+    const batteryPercentageElement = document.getElementById('batteryPercentage');
+    const batteryStatusElement = document.getElementById('batteryStatus');
+    const batteryContainer = document.getElementById('batteryContainer');
+    
+    // Cek apakah Battery Status API tersedia
+    if ('getBattery' in navigator) {
+        navigator.getBattery().then(function(battery) {
+            // Fungsi untuk update tampilan baterai
+            function updateBatteryInfo() {
+                const level = battery.level * 100;
+                const isCharging = battery.charging;
+                const roundedLevel = Math.round(level);
+                const isLightMode = body.classList.contains('light-mode');
+                
+                // Update persentase
+                batteryPercentageElement.textContent = `${roundedLevel}%`;
+                batteryLevelElement.style.width = `${level}%`;
+                
+                // Update warna berdasarkan level dan tema
+                if (level > 60) {
+                    batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-green-600' : 'bg-green-500');
+                } else if (level > 20) {
+                    batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-yellow-600' : 'bg-yellow-500');
+                } else {
+                    batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-red-600' : 'bg-red-500');
+                }
+                
+                // Update status charging
+                if (isCharging) {
+                    batteryContainer.classList.add('charging');
+                    batteryStatusElement.textContent = 'Charging';
+                    batteryLevelElement.classList.add('battery-charging');
+                } else {
+                    batteryContainer.classList.remove('charging');
+                    batteryLevelElement.classList.remove('battery-charging');
+                    
+                    if (battery.dischargingTime === Infinity) {
+                        batteryStatusElement.textContent = 'Fully charged';
+                    } else {
+                        batteryStatusElement.textContent = 'Discharging';
+                    }
+                }
+                
+                // Update status dengan waktu estimasi
+                if (isCharging && battery.chargingTime !== Infinity) {
+                    const hours = Math.floor(battery.chargingTime / 3600);
+                    const minutes = Math.floor((battery.chargingTime % 3600) / 60);
+                    batteryStatusElement.textContent = `Charging (${hours}h ${minutes}m)`;
+                } else if (!isCharging && battery.dischargingTime !== Infinity) {
+                    const hours = Math.floor(battery.dischargingTime / 3600);
+                    const minutes = Math.floor((battery.dischargingTime % 3600) / 60);
+                    batteryStatusElement.textContent = `${hours}h ${minutes}m left`;
+                }
+                
+                // Update status di console (opsional, untuk debugging)
+                console.log(`Real Battery: ${roundedLevel}% | Charging: ${isCharging}`);
+            }
+            
+            // Update pertama kali
+            updateBatteryInfo();
+            
+            // Event listener untuk perubahan
+            battery.addEventListener('levelchange', updateBatteryInfo);
+            battery.addEventListener('chargingchange', updateBatteryInfo);
+            battery.addEventListener('chargingtimechange', updateBatteryInfo);
+            battery.addEventListener('dischargingtimechange', updateBatteryInfo);
+            
+            // Simpan reference untuk cleanup
+            batteryMonitor = battery;
+            
+        }).catch(function(error) {
+            console.error("Battery API error:", error);
+            batteryStatusElement.textContent = 'API Error';
+            fallbackBattery();
+        });
+    } else {
+        console.log("Battery Status API not supported");
+        batteryStatusElement.textContent = 'API Not Supported';
+        fallbackBattery();
+    }
+    
+    // Fallback jika Battery API tidak tersedia
+    function fallbackBattery() {
+        console.log("Using battery simulation");
+        batteryStatusElement.textContent = 'Simulated';
+        
+        // Coba dapatkan dari localStorage jika ada
+        let simulatedLevel = localStorage.getItem('simulatedBattery');
+        if (!simulatedLevel) {
+            // Generate level awal yang realistis
+            simulatedLevel = Math.floor(Math.random() * 30) + 30; // 30-60%
+            localStorage.setItem('simulatedBattery', simulatedLevel.toString());
+        } else {
+            simulatedLevel = parseInt(simulatedLevel);
+        }
+        
+        let isSimulatedCharging = localStorage.getItem('simulatedCharging') === 'true';
+        
+        // Fungsi simulasi
+        function simulateBattery() {
+            const isLightMode = body.classList.contains('light-mode');
+            let newLevel = simulatedLevel;
+            
+            if (isSimulatedCharging) {
+                // Mode charging: tambah baterai
+                const chargeRate = 0.5; // 0.5% per interval
+                newLevel = Math.min(100, newLevel + chargeRate);
+                
+                // Jika sudah full, berhenti charging
+                if (newLevel >= 100) {
+                    isSimulatedCharging = false;
+                    localStorage.setItem('simulatedCharging', 'false');
+                    batteryContainer.classList.remove('charging');
+                    batteryLevelElement.classList.remove('battery-charging');
+                    batteryStatusElement.textContent = 'Fully charged';
+                } else {
+                    batteryStatusElement.textContent = 'Charging';
+                }
+            } else {
+                // Mode discharging: kurangi baterai
+                const drainRate = 0.1; // 0.1% per interval
+                newLevel = Math.max(5, newLevel - drainRate); // Minimal 5%
+                
+                // Jika baterai terlalu rendah, mulai charging
+                if (newLevel <= 15 && Math.random() > 0.7) {
+                    isSimulatedCharging = true;
+                    localStorage.setItem('simulatedCharging', 'true');
+                    batteryContainer.classList.add('charging');
+                    batteryLevelElement.classList.add('battery-charging');
+                    batteryStatusElement.textContent = 'Charging';
+                } else {
+                    // Hitung waktu tersisa (estimasi)
+                    const minutesLeft = Math.round((newLevel - 5) / drainRate);
+                    const hours = Math.floor(minutesLeft / 60);
+                    const minutes = minutesLeft % 60;
+                    
+                    if (hours > 0) {
+                        batteryStatusElement.textContent = `${hours}h ${minutes}m left`;
+                    } else {
+                        batteryStatusElement.textContent = `${minutes}m left`;
+                    }
+                }
+            }
+            
+            // Simpan level baru
+            simulatedLevel = newLevel;
+            localStorage.setItem('simulatedBattery', newLevel.toString());
+            
+            // Update tampilan
+            const roundedLevel = Math.round(newLevel);
+            batteryPercentageElement.textContent = `${roundedLevel}%`;
+            batteryLevelElement.style.width = `${newLevel}%`;
+            
+            // Update warna berdasarkan tema
+            if (newLevel > 60) {
+                batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-green-600' : 'bg-green-500');
+            } else if (newLevel > 20) {
+                batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-yellow-600' : 'bg-yellow-500');
+            } else {
+                batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-red-600' : 'bg-red-500');
+            }
+            
+            console.log(`Simulated Battery: ${roundedLevel}% | Charging: ${isSimulatedCharging}`);
+        }
+        
+        // Jalankan simulasi pertama kali
+        simulateBattery();
+        
+        // Update setiap 10 detik
+        setInterval(simulateBattery, 10000);
+    }
+}
+
+// Cleanup function untuk battery monitor
+function cleanupBatteryMonitor() {
+    if (batteryMonitor) {
+        batteryMonitor.removeEventListener('levelchange', updateBatteryInfo);
+        batteryMonitor.removeEventListener('chargingchange', updateBatteryInfo);
+        batteryMonitor.removeEventListener('chargingtimechange', updateBatteryInfo);
+        batteryMonitor.removeEventListener('dischargingtimechange', updateBatteryInfo);
+        batteryMonitor = null;
+    }
+}
+
+// Function to update total endpoints
+function updateTotalEndpoints() {
+    const totalEndpointsElement = document.getElementById('totalEndpoints');
+    totalEndpointsElement.textContent = totalEndpoints;
+}
+
+// Function to update total categories
+function updateTotalCategories() {
+    const totalCategoriesElement = document.getElementById('totalCategories');
+    totalCategoriesElement.textContent = totalCategories;
 }
 
 function showLoading() {
@@ -206,7 +408,7 @@ function createMediaPreview(url, contentType) {
             previewHtml = `
                 <div class="media-preview">
                     <iframe src="${url}" class="media-iframe" frameborder="0"></iframe>                            
-                </div>
+ </div>
             `;
             break;
             
@@ -214,7 +416,7 @@ function createMediaPreview(url, contentType) {
             previewHtml = `
                 <div class="media-preview">
                     <iframe src="${url}" class="media-iframe" frameborder="0"></iframe>                            
-                </div>
+ </div>
             `;
     }
     
@@ -325,6 +527,20 @@ function loadApis() {
     }
     
     const isLightMode = body.classList.contains('light-mode');
+    
+    // Calculate total endpoints and categories
+    totalEndpoints = 0;
+    totalCategories = apiData.categories.length;
+    
+    apiData.categories.forEach(category => {
+        totalEndpoints += category.items.length;
+    });
+    
+    // Update total endpoints display
+    updateTotalEndpoints();
+    
+    // Update total categories display
+    updateTotalCategories();
     
     let html = '';
     apiData.categories.forEach((category, catIdx) => {
@@ -538,6 +754,9 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing theme...');
     initTheme();
     
+    // Initialize REAL battery detection
+    initBatteryDetection();
+    
     // Load API data
     fetch('iyah.json')
         .then(res => {
@@ -610,4 +829,9 @@ document.addEventListener('click', function(event) {
             performSearch();
         }
     }
+});
+
+// Cleanup saat page unload
+window.addEventListener('beforeunload', function() {
+    cleanupBatteryMonitor();
 });
