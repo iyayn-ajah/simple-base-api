@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +23,7 @@
     <div id="toast" class="toast">
         <div class="flex items-center gap-3">
             <svg id="toastIcon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
             </svg>
             <span id="toastMessage" class="font-medium">Action completed</span>
         </div>
@@ -46,8 +47,45 @@
             <div class="mb-6 flex justify-center">
                 <img src="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1764494355026.jpeg" alt="Logo" class="w-full max-w-sm rounded-xl shadow-xl hover:scale-105 transition-all duration-300">
             </div>
-            <h1 class="text-4xl md:text-6xl font-black mb-4 leading-tight tracking-wider text-center gray-gradient-text">REST EH PI AY BY SHIKAKU IYAYN</h1>
+            <h1 class="text-4xl md:text-6xl font-black mb-4 leading-tight tracking-wider text-center gray-gradient-text">REST EH PI AY</h1>
             <p class="text-lg font-light tracking-wide text-center text-gray-300 light-mode:text-gray-600">Kumpulan API Endpoint yang mungkin berguna.</p>
+            
+            <!-- User Battery & Total Endpoints & Total Category Stats -->
+            <div class="mt-8 flex flex-wrap justify-center items-center gap-4 md:gap-8">
+                <!-- Battery Card -->
+                <div class="stats-card flex items-center gap-3 px-4 py-3 rounded-lg">
+                    <div class="flex flex-col items-center">
+                        <span class="text-xs font-medium stats-text-secondary">Your Battery</span>
+                        <div class="flex items-center gap-2 mt-1">
+                            <div id="batteryContainer" class="battery-container">
+                                <div id="batteryLevel" class="battery-level bg-green-500" style="width: 0%"></div>
+                                <div class="battery-tip"></div>
+                            </div>
+                            <div class="flex flex-col items-start">
+                                <span id="batteryPercentage" class="text-sm font-bold">0%</span>
+                                <span id="batteryStatus" class="battery-status-text stats-text-secondary">Detecting...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Total Endpoints Card -->
+                <div class="stats-card flex items-center gap-3 px-4 py-3 rounded-lg">
+                    <div class="flex flex-col items-center">
+                        <span class="text-xs font-medium stats-text-secondary">Total Endpoints</span>
+                        <span id="totalEndpoints" class="text-lg font-bold">0</span>
+                    </div>
+                </div>
+                
+                <!-- Total Category Card -->
+                <div class="stats-card flex items-center gap-3 px-4 py-3 rounded-lg">
+                    <div class="flex flex-col items-center">
+                        <span class="text-xs font-medium stats-text-secondary">Total Categories</span>
+                        <span id="totalCategories" class="text-lg font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+            
             <div class="mt-6 h-1 w-32 mx-auto bg-gradient-to-r from-gray-500 via-gray-400 to-gray-500 rounded-full"></div>
         </header>
 
@@ -76,12 +114,13 @@
         <!-- API List -->
         <div id="apiList" class="space-y-4"></div>
 
-        <section id="uhm" class="mt-12 pt-8 border-t border-gray-700 light-mode:border-gray-300">
-            <h2 class="text-lg font-bold mb-6 text-center gray-gradient-text">Source code:</h2>
+        <!-- Social Media Section -->
+        <section id="social" class="mt-12 pt-8 border-t border-gray-700 light-mode:border-gray-300">
+            <h2 class="text-lg font-bold mb-6 text-center gray-gradient-text">Source Code:</h2>
             <div id="socialContainer" class="flex flex-wrap justify-center gap-3">
                 <a href="https://github.com/iyayn-ajah/simple-base-api" target="_blank" class="social-badge">
                     <div class="px-4 py-2 rounded-lg text-sm transition-colors">
-                        SOURCE CODE
+                        Source Code
                     </div>
                 </a>
             </div>
