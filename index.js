@@ -22,8 +22,8 @@ app.get('/styles.css', (req, res) => {
   res.sendFile(path.join(__dirname, 'styles.css'));
 });
 
-app.get('/scripts.js', (req, res) => {
-  res.sendFile(path.join(__dirname, 'scripts.js'));
+app.get('/script.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'script.js'));
 });
 
 app.get('/iyah.json', (req, res) => {
