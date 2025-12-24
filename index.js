@@ -65,17 +65,17 @@ router.get('/downloader/videy', async (req, res) => {
 
 router.get('/downloader/pixeldrain', async (req, res) => {
   const url = req.query.url;
-  if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
+  if (!url) return res.status(400).json({ error: "Missing 'url' parameter" }); 
   try {
     const fileId = url.split('/').pop();
-    const data = await (fetch(`https://pixeldrain.com/api/file/${fileId}/info`)).json();
-      return res.json({
-        filename: data.name,
-        fileurl: `https://pixeldrain.com/api/file/${fileId}`
-      });
-    } else {
+    const data = await (await fetch(`https://pixeldrain.com/api/file/${fileId}/info`)).json(); 
+    if (!data.name) {
       return res.status(404).json({ error: "Pixeldrain file not found or invalid title" });
-    }
+    }  
+    return res.json({
+      filename: data.name,
+      fileurl: `https://pixeldrain.com/api/file/${fileId}`
+    });    
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
