@@ -48,6 +48,97 @@ router.get('/ai/gemini', async (req, res) => {
   }
 });
 
+router.get('/ai/geminireadfile', async (req, res) => {
+ const text = req.query.text;
+  const fileurl = req.query.fileurl;
+  const apikey = req.query.apikey;
+  if (!text || !fileurl || !apikey) return res.status(400).json({ error: "Missing 'text', 'fileurl' or 'apikey' parameter" });
+  try {
+    const ai = new GoogleGenAI({ apiKey: `${apikey}` });
+    const mediaBuffer = await fetch(fileurl).then((response) => response.buffer());
+    const hehe = await fromBuffer(mediaBuffer);
+    const base64ImageFile = Buffer.from(mediaBuffer).toString("base64");
+    const contents = [
+      {
+        inlineData: {
+          mimeType: hehe.mime,
+          data: base64ImageFile,
+        },
+      },
+      { text: text },
+    ];
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash-lite",
+      contents: contents,
+    });
+    const data = {
+      text: response.text
+    };
+    return res.json(data);
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
+router.get('/ai/geminiwithsysteminstruction', async (req, res) => {
+const text = req.query.text;
+  const system = req.query.system;
+  const apikey = req.query.apikey;
+  if (!text || !system || !apikey) return res.status(400).json({ error: "Missing 'text' or 'system' parameter" });
+  try {
+    const ai = new GoogleGenAI({ apiKey: `${apikey}` });
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash-lite",
+      contents: `${text}`,
+      config: {
+        systemInstruction: `${system}`,
+      },
+    });
+    const data = {
+      text: response.text
+    };
+    return res.json(data);
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
+router.get('/ai/geminireadfilewithsysteminstruction', async (req, res) => {
+const text = req.query.text;
+  const fileurl = req.query.fileurl;
+  const system = req.query.system;
+  const apikey = req.query.apikey;
+  if (!text || !fileurl || !system || !apikey) return res.status(400).json({ error: "Missing 'text', 'fileurl', 'system' or 'apikey' parameter" });
+  try {
+    const ai = new GoogleGenAI({ apiKey: `${apikey}` });
+    const mediaBuffer = await fetch(fileurl).then((response) => response.buffer());
+    const hehe = await fromBuffer(mediaBuffer);
+    const base64ImageFile = Buffer.from(mediaBuffer).toString("base64");
+    const contents = [
+      {
+        inlineData: {
+          mimeType: hehe.mime,
+          data: base64ImageFile,
+        },
+      },
+      { text: text },
+    ];
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash-lite",
+      contents: contents,
+      config: {
+        systemInstruction: `${system}`,
+      },
+    });
+    const data = {
+      text: response.text
+    };
+    return res.json(data);
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 // DOWNLOADER ENDPOINT
 router.get('/downloader/videy', async (req, res) => {
   const url = req.query.url;
