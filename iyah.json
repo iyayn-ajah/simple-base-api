@@ -39,12 +39,12 @@
           }
         },
         {
-          "name": "TIKTOK DOWNLOADER",
-          "path": "/api/downloader/tiktok?url=",
-          "desc": "Download videos from tiktok",
+          "name": "THREADS DOWNLOADER",
+          "path": "/api/downloader/threads?url=",
+          "desc": "Download media from threads",
           "status": "ready",
           "params": {
-            "url": "Tiktok URL"
+            "url": "Threads URL"
           }
         }
       ]
