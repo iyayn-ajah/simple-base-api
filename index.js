@@ -134,6 +134,14 @@ app.use('/api', router);
 /*
 Frontend
 */
+app.get('/script.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'script.js'));
+});
+
+app.get('/listapi.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'iyah.json'));
+});
+
 app.get('/', (req, res) => {
     res.send(`<!DOCTYPE html>
 <html lang="en">
@@ -634,14 +642,6 @@ app.get('/', (req, res) => {
 </body>
 </html>
     `);
-});
-
-app.get('/script.js', (req, res) => {
-  res.sendFile(path.join(__dirname, 'script.js'));
-});
-
-app.get('/iyah.json', (req, res) => {
-  res.sendFile(path.join(__dirname, 'iyah.json'));
 });
 
 module.exports = app;
