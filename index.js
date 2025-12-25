@@ -6,7 +6,7 @@ const { GoogleGenAI } = require('@google/genai');
 const { fromBuffer } = require('file-type');
 const axios = require("axios");
 const FormData = require("form-data");
-const { transcriptyt } = require('./lib/youtubetranscript.js');
+const { ssweb } = require('./lib/ssweb.js');
 
 const app = express();
 const router = express.Router();
@@ -87,47 +87,33 @@ router.get('/downloader/pixeldrain', async (req, res) => {
 });
 
 // TOOLS ENDPOINT 
-router.get('/tools/imagetools', async (req, res) => {
-  const imgurl = req.query.imgurl;
-  const type = req.query.type;
-  if (!imgurl || !type) return res.status(400).json({ error: "Missing imgurl or type parameter. List type: 'removebg', 'enhance', 'upscale', 'restore', 'colorize'" });
+router.get('/tools/ssweb-pc', async (req, res) => {
+  const url = req.query.url;
+  if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
   try {
-  const bufferyeah = await fetch(imgurl).then((response) => response.buffer());
-  const form = new FormData();
-    form.append("file", bufferyeah, "image.png");
-    form.append("type", type);
-
-    const { data } = await axios.post(
-      "https://imagetools.rapikzyeah.biz.id/upload",
-      form,
-      {
-        headers: form.getHeaders(),
-      }
-    );
-    const dom = new JSDOM(data);
-    const resultImg = dom.window.document.querySelector("#result");
-
-    if (!resultImg) throw new Error("Gagal menemukan elemen <img id='result'>");
-
-    const resultpic = resultImg.getAttribute("src");
-    if (!resultpic) throw new Error("URL hasil tidak ditemukan");
-const buffernya = await fetch(resultpic).then((response) => response.buffer());
+    const resultpic = await ssweb(url, { width: 1280, height: 720 })
+    const buffernya = await fetch(resultpic).then((response) => response.buffer());
 res.writeHead(200, {
                 'Content-Type': 'image/png',
                 'Content-Length': buffernya.length,
             });
 res.end(buffernya);
- } catch (e) {
+  } catch (e) {
     return res.status(500).json({ error: e.message });
   }
 });
 
-router.get('/tools/yt-transcript', async (req, res) => {
+router.get('/tools/ssweb-hp', async (req, res) => {
   const url = req.query.url;
   if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
   try {
-    const anunyah = await transcriptyt(url);
-    return res.json(anunyah);
+    const resultpic = await ssweb(url, { width: 720, height: 1280 })
+    const buffernya = await fetch(resultpic).then((response) => response.buffer());
+res.writeHead(200, {
+                'Content-Type': 'image/png',
+                'Content-Length': buffernya.length,
+            });
+res.end(buffernya);
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
