@@ -758,9 +758,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initBatteryDetection();
     
     // Load API data
-    fetch('iyah.json')
+    fetch('listapi.json')
         .then(res => {
-            if (!res.ok) throw new Error('Failed to load iyah.json');
+            if (!res.ok) throw new Error('Failed to load listapi.json');
             return res.json();
         })
         .then(data => {
@@ -775,7 +775,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="text-center p-8 bg-red-900/20 border border-red-700 rounded-lg">
                     <div class="text-4xl mb-4">⚠️</div>
                     <h3 class="font-bold text-lg mb-2">Failed to load API data</h3>
-                    <p class="text-sm">Please check if iyah.json exists on the server</p>
+                    <p class="text-sm">Please check if listapi.json exists on the server</p>
                     <p class="text-xs mt-4 text-gray-400">Error: ${err.message}</p>
                 </div>
             `;
