@@ -139,7 +139,7 @@ app.get('/script.js', (req, res) => {
 });
 
 app.get('/listapi.json', (req, res) => {
-  res.sendFile(path.join(__dirname, 'iyah.json'));
+  res.sendFile(path.join(__dirname, 'listapi.json'));
 });
 
 app.get('/', (req, res) => {
