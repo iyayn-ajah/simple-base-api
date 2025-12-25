@@ -14,7 +14,7 @@ There may be a module missing for the scraper. If so, add it to package.json and
 
 ---
 # Setting API name etc in index.js
-<img id="logoImg" src="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1766655158167.jpeg" >
+<img id="Eum" src="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1766668793566.jpeg" >
 
 ---
 # 🛠️ How to Add Features to index.js
