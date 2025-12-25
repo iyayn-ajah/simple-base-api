@@ -38,7 +38,7 @@ router.get('/ai/gemini', async (req, res) => {
   try {
     const ai = new GoogleGenAI({ apiKey: `${apikey}` });
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash-lite",
       contents: `${text}`
     });
     const replyText = response?.text ?? response?.output?.[0]?.content ?? JSON.stringify(response);
