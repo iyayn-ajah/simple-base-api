@@ -630,59 +630,7 @@ app.get('/', (req, res) => {
         </footer>
     </div>
 
-    <script>
-    // Theme toggle (simple)
-    const themeBtn = document.getElementById('themeToggle');
-    const darkIcon = document.getElementById('theme-toggle-dark-icon');
-    const lightIcon = document.getElementById('theme-toggle-light-icon');
-
-    // Initialize theme from localStorage
-    if (localStorage.getItem('theme') === 'light') {
-        document.documentElement.classList.add('light-mode');
-        darkIcon.classList.add('hidden');
-        lightIcon.classList.remove('hidden');
-    }
-
-    themeBtn.addEventListener('click', () => {
-        document.documentElement.classList.toggle('light-mode');
-        const isLight = document.documentElement.classList.contains('light-mode');
-        if (isLight) {
-            darkIcon.classList.add('hidden');
-            lightIcon.classList.remove('hidden');
-            localStorage.setItem('theme', 'light');
-        } else {
-            darkIcon.classList.remove('hidden');
-            lightIcon.classList.add('hidden');
-            localStorage.setItem('theme', 'dark');
-        }
-    });
-
-    // Optional: simple battery API (if supported)
-    if (navigator.getBattery) {
-        navigator.getBattery().then(battery => {
-            const levelEl = document.getElementById('batteryLevel');
-            const pctEl = document.getElementById('batteryPercentage');
-            const statusEl = document.getElementById('batteryStatus');
-
-            function updateBattery() {
-                const pct = Math.round(battery.level * 100) + '%';
-                pctEl.innerText = pct;
-                levelEl.style.width = pct;
-                statusEl.innerText = battery.charging ? 'Charging' : 'Not charging';
-                if (battery.charging) {
-                    levelEl.classList.add('battery-charging');
-                } else {
-                    levelEl.classList.remove('battery-charging');
-                }
-            }
-            updateBattery();
-            battery.addEventListener('levelchange', updateBattery);
-            battery.addEventListener('chargingchange', updateBattery);
-        }).catch(() => {
-            // ignored
-        });
-    }
-    </script>
+   <script src="script.js"></script>
 </body>
 </html>
     `);
