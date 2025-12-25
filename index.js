@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname)));
 /*
-UNTUK SETTING NAMA WEB DLL
+For setting API name etc
 */
 const title = "EH PI AY DOANG";
 const favicon = "https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1764494355026.jpeg?format=png&name=900x900";
@@ -25,7 +25,7 @@ const headerdescription = "Kumpulan API Endpoint yang mungkin berguna.";
 const footer = "© 2025 IYAYN AJAH";
 
 /*
-Nah yang di bawah ini fiturnyah
+Below are the features
 */
 // AI ENDPOINT
 router.get('/ai/gemini', async (req, res) => {
