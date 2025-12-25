@@ -110,7 +110,7 @@ res.end(buffernya);
 ```
 -----
 
-## 📄 How to add API documentation to iyah.json
+## 📄 How to add API documentation to listapi.json
 # Add endpoint documentation with category
 ```json
 {
