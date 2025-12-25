@@ -14,7 +14,7 @@
           }
         }
       ]
-    },
+    }
     {
       "name": "DOWNLOADER API ENDPOINT",
       "items": [
@@ -26,18 +26,7 @@
           "params": {
             "url": "Videy URL"
           }
-        },
-        {
-          "name": "PIXELDRAIN DOWNLOADER",
-          "path": "/api/downloader/pixeldrain?url=",
-          "desc": "Download file from pixeldrain",
-          "status": "ready",
-          "params": {
-            "url": "Pixeldrain URL"
-          }
         }
-      ]
-    },
     {
       "name": "TOOLS API ENDPOINT",
       "items": [
