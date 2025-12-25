@@ -14,35 +14,12 @@
           }
         },
         {
-          "name": "GEMINI READFILE",
-          "path": "/api/ai/geminireadfile?text=&fileurl=&apikey=",
-          "desc": "Gemini AI with file reading capability",
-          "status": "ready",
-          "params": {
-            "text": "Input text",
-            "fileurl": "File URL to read",
-            "apikey": "Your Gemini API key"
-          }
-        },
-        {
           "name": "GEMINI CHAT WITH SYSTEM INSTRUCTION",
           "path": "/api/ai/geminiwithsystemInstruction?text=&system=&apikey=",
           "desc": "Gemini AI with custom system instructions",
           "status": "ready",
           "params": {
             "text": "Input text",
-            "system": "System instruction",
-            "apikey": "Your Gemini API key"
-          }
-        },
-        {
-          "name": "GEMINI READFILE WITH SYSTEM INSTRUCTION",
-          "path": "/api/ai/geminireadfilewithsystemInstruction?text=&fileurl=&system=&apikey=",
-          "desc": "Gemini file reading with system instructions",
-          "status": "ready",
-          "params": {
-            "text": "Input text",
-            "fileurl": "File URL to read",
             "system": "System instruction",
             "apikey": "Your Gemini API key"
           }
@@ -59,6 +36,15 @@
           "status": "ready",
           "params": {
             "url": "Videy URL"
+          }
+        },
+        {
+          "name": "TIKTOK DOWNLOADER",
+          "path": "/api/downloader/tiktok?url=",
+          "desc": "Download videos from tiktok",
+          "status": "ready",
+          "params": {
+            "url": "Tiktok URL"
           }
         }
       ]
