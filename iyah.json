@@ -34,22 +34,21 @@
       "name": "TOOLS API ENDPOINT",
       "items": [
         {
-          "name": "IMAGE TOOLS",
-          "path": "/api/tools/imagetools?imgurl=&type=",
-          "desc": "Various image processing tools",
+          "name": "SCREENSHOT WEB PC (16:9)",
+          "path": "/api/tools/ssweb-pc?url=",
+          "desc": "SCREENSHOT WEB 16:9",
           "status": "ready",
           "params": {
-            "imgurl": "Image URL",
-            "type": "Tool type"
+            "url": "URL"
           }
         },
         {
-          "name": "YOUTUBE TRANSCRIPT",
-          "path": "/api/tools/yt-transcript?url=",
-          "desc": "Get YouTube video transcripts",
+          "name": "SCREENSHOT WEB HP (9:16)",
+          "path": "/api/tools/ssweb-hp?url=",
+          "desc": "SCREENSHOT WEB 9:16",
           "status": "ready",
           "params": {
-            "url": "YouTube video URL"
+            "url": "URL"
           }
         }
       ]
