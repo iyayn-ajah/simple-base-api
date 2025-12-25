@@ -1,3 +1,4 @@
+
 {
   "categories": [
     {
@@ -14,7 +15,7 @@
           }
         }
       ]
-    }
+    },
     {
       "name": "DOWNLOADER API ENDPOINT",
       "items": [
@@ -27,6 +28,8 @@
             "url": "Videy URL"
           }
         }
+      ]
+    },
     {
       "name": "TOOLS API ENDPOINT",
       "items": [
