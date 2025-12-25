@@ -131,6 +131,9 @@ res.end(buffernya);
 
 app.use('/api', router);
 
+/*
+Frontend
+*/
 app.get('/', (req, res) => {
     res.send(`<!DOCTYPE html>
 <html lang="en">
