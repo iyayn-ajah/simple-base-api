@@ -15,21 +15,6 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname)));
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-app.get('/styles.css', (req, res) => {
-  res.sendFile(path.join(__dirname, 'styles.css'));
-});
-
-app.get('/script.js', (req, res) => {
-  res.sendFile(path.join(__dirname, 'script.js'));
-});
-
-app.get('/iyah.json', (req, res) => {
-  res.sendFile(path.join(__dirname, 'iyah.json'));
-});
 
 // AI ENDPOINT
 router.get('/ai/gemini', async (req, res) => {
@@ -134,6 +119,22 @@ res.end(buffernya);
 });
 
 app.use('/api', router);
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/styles.css', (req, res) => {
+  res.sendFile(path.join(__dirname, 'styles.css'));
+});
+
+app.get('/script.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'script.js'));
+});
+
+app.get('/iyah.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'iyah.json'));
+});
 
 module.exports = app;
 
