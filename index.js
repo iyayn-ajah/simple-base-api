@@ -48,38 +48,6 @@ router.get('/ai/gemini', async (req, res) => {
   }
 });
 
-router.get('/ai/geminireadfile', async (req, res) => {
- const text = req.query.text;
-  const fileurl = req.query.fileurl;
-  const apikey = req.query.apikey;
-  if (!text || !fileurl || !apikey) return res.status(400).json({ error: "Missing 'text', 'fileurl' or 'apikey' parameter" });
-  try {
-    const ai = new GoogleGenAI({ apiKey: `${apikey}` });
-    const mediaBuffer = await fetch(fileurl).then((response) => response.buffer());
-    const hehe = await fromBuffer(mediaBuffer);
-    const base64ImageFile = Buffer.from(mediaBuffer).toString("base64");
-    const contents = [
-      {
-        inlineData: {
-          mimeType: hehe.mime,
-          data: base64ImageFile,
-        },
-      },
-      { text: text },
-    ];
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-lite",
-      contents: contents,
-    });
-    const data = {
-      text: response.text
-    };
-    return res.json(data);
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
-});
-
 router.get('/ai/geminiwithsysteminstruction', async (req, res) => {
 const text = req.query.text;
   const system = req.query.system;
@@ -103,41 +71,6 @@ const text = req.query.text;
   }
 });
 
-router.get('/ai/geminireadfilewithsysteminstruction', async (req, res) => {
-const text = req.query.text;
-  const fileurl = req.query.fileurl;
-  const system = req.query.system;
-  const apikey = req.query.apikey;
-  if (!text || !fileurl || !system || !apikey) return res.status(400).json({ error: "Missing 'text', 'fileurl', 'system' or 'apikey' parameter" });
-  try {
-    const ai = new GoogleGenAI({ apiKey: `${apikey}` });
-    const mediaBuffer = await fetch(fileurl).then((response) => response.buffer());
-    const hehe = await fromBuffer(mediaBuffer);
-    const base64ImageFile = Buffer.from(mediaBuffer).toString("base64");
-    const contents = [
-      {
-        inlineData: {
-          mimeType: hehe.mime,
-          data: base64ImageFile,
-        },
-      },
-      { text: text },
-    ];
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-lite",
-      contents: contents,
-      config: {
-        systemInstruction: `${system}`,
-      },
-    });
-    const data = {
-      text: response.text
-    };
-    return res.json(data);
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
-});
 
 // DOWNLOADER ENDPOINT
 router.get('/downloader/videy', async (req, res) => {
@@ -154,28 +87,22 @@ router.get('/downloader/videy', async (req, res) => {
   }
 });
 
-router.get('/downloader/pixeldrain', async (req, res) => {
+router.get('/downloader/tiktok', async (req, res) => {
   const url = req.query.url;
-  if (!url) return res.status(400).json({ error: "Missing 'url' parameter" }); 
+  if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
   try {
-    const fileId = url.split('/').pop();  
-    const response = await axios.get(`https://pixeldrain.com/api/file/${fileId}/info`, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36'
-      }
-    });    
-    const data = response.data;  
-    if (!data.name) {
-      return res.status(404).json({ error: "Pixeldrain file not found or invalid title" });
-    }   
-    return res.json({
-      filename: data.name,
-      fileurl: `https://pixeldrain.com/api/file/${fileId}`
-    });    
+    let result = await (await fetch(`https://www.tikwm.com/api/?url=${text}`)).json()
+    const data = {
+      title: result.data.title,
+      videourl: result.data.play,
+      audiourl: result.data.music_info.play
+    };
+    return res.json(data);
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
 });
+
 
 // TOOLS ENDPOINT 
 router.get('/tools/ssweb-pc', async (req, res) => {
