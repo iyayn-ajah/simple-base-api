@@ -13,8 +13,8 @@ There may be a module missing for the scraper. If so, add it to package.json and
 ---------
 
 ---
-# Setting API name etc in index.js
-<img id="Eum" src="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1766668793566.jpeg" >
+# Setting API name etc
+<img id="Eum" src="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1766668996856.jpeg" >
 
 ---
 # 🛠️ How to Add Features to index.js
