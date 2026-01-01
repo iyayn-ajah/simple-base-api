@@ -648,17 +648,6 @@ app.get('/', (req, res) => {
                 </a>
             </div>
         </section>
-        <!-- Source Code -->
-        <section id="social" class="mt-12 pt-8 border-t border-gray-700 light-mode:border-gray-300">
-            <h2 class="text-lg font-bold mb-6 text-center gray-gradient-text">Source Code:</h2>
-            <div id="socialContainer" class="flex flex-wrap justify-center gap-3">
-                <a href="https://github.com/iyayn-ajah/simple-base-api" target="_blank" class="social-badge">
-                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
-                        Source Code
-                    </div>
-                </a>
-            </div>
-        </section>
 
         <!-- Footer -->
         <footer id="siteFooter" class="mt-12 pt-6 border-t border-gray-700 light-mode:border-gray-300 text-center text-xs">
