@@ -622,9 +622,9 @@ app.get('/', (req, res) => {
         <!-- API List -->
         <div id="apiList" class="space-y-4"></div>
 
-        <!-- Media Social -->
+        <!-- Media Social  -->
         <section id="social" class="mt-12 pt-8 border-t border-gray-700 light-mode:border-gray-300">
-            <h2 class="text-lg font-bold mb-6 text-center gray-gradient-text">Connect with me</h2>
+            <h2 class="text-lg font-bold mb-6 text-center gray-gradient-text">Media Social</h2>
             <div id="socialContainer" class="flex flex-wrap justify-center gap-3">
                 <a href="https://t.me/AfiqAjah" target="_blank" class="social-badge">
                     <div class="px-4 py-2 rounded-lg text-sm transition-colors">
