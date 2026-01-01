@@ -273,17 +273,18 @@ app.get('/', (req, res) => {
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.9);
-        backdrop-filter: blur(5px);
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(8px);
         z-index: 9999;
     }
 
     .light-mode .loading-overlay {
-        background: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.95);
     }
 
     .loading-overlay.active {
         display: flex;
+        animation: fadeIn 0.2s ease-out;
     }
 
     .spinner {
@@ -512,6 +513,14 @@ app.get('/', (req, res) => {
         color: var(--stats-text-secondary);
     }
 
+    /* Prevent body scroll when loading */
+    body.no-scroll {
+        overflow: hidden !important;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
+
     /* small responsive tweaks */
     @media (max-width: 640px) {
         .theme-toggle-btn { width: 52px; height: 52px; bottom: 16px; right: 16px; }
@@ -654,8 +663,7 @@ app.get('/', (req, res) => {
             ${footer}
         </footer>
     </div>
-
-   <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
     `);
