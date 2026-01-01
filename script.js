@@ -6,27 +6,6 @@ let allApiElements = [];
 let totalEndpoints = 0;
 let totalCategories = 0;
 let batteryMonitor = null;
-let scrollPosition = 0;
-
-// Fungsi untuk menonaktifkan scroll
-function disableScroll() {
-    // Simpan posisi scroll saat ini
-    scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-    
-    // Tambah class no-scroll ke body
-    document.body.classList.add('no-scroll');
-    document.body.style.top = `-${scrollPosition}px`;
-}
-
-// Fungsi untuk mengaktifkan scroll kembali
-function enableScroll() {
-    // Hapus class no-scroll dari body
-    document.body.classList.remove('no-scroll');
-    document.body.style.top = '';
-    
-    // Kembalikan posisi scroll
-    window.scrollTo(0, scrollPosition);
-}
 
 // Fungsi tema
 const themeToggleBtn = document.getElementById('themeToggle');
@@ -299,20 +278,6 @@ function updateTotalCategories() {
     totalCategoriesElement.textContent = totalCategories;
 }
 
-function showLoading() {
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    disableScroll(); // Nonaktifkan scroll sebelum menampilkan loading
-    loadingOverlay.classList.add('active');
-}
-
-function hideLoading() {
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    loadingOverlay.classList.remove('active');
-    setTimeout(() => {
-        enableScroll(); // Aktifkan scroll setelah loading hilang
-    }, 100);
-}
-
 function showToast(message, isError = false) {
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
@@ -465,7 +430,19 @@ async function executeRequest(e, catIdx, epIdx, method, path) {
     const curlCommand = document.getElementById(`curl-command-${catIdx}-${epIdx}`);
     const executeBtn = form.querySelector('button[type="submit"]');
     
+    // Create loading spinner element if not exists
+    let spinner = executeBtn.querySelector('.local-spinner');
+    if (!spinner) {
+        spinner = document.createElement('span');
+        spinner.className = 'local-spinner ml-2';
+        executeBtn.appendChild(spinner);
+    }
+    
+    // Set loading state
+    isRequestInProgress = true;
     executeBtn.disabled = true;
+    executeBtn.classList.add('btn-loading');
+    spinner.classList.add('active');
     
     const formData = new FormData(form);
     const params = new URLSearchParams();
@@ -480,9 +457,6 @@ async function executeRequest(e, catIdx, epIdx, method, path) {
     const curlText = `curl -X ${method} "${fullPath}"`;
     curlCommand.textContent = curlText;
     curlSection.classList.remove('hidden');
-    
-    isRequestInProgress = true;
-    showLoading(); // Ini akan disable scroll
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 30000);
@@ -533,9 +507,11 @@ async function executeRequest(e, catIdx, epIdx, method, path) {
         showToast('Request failed!', true);
         
     } finally {
+        // Reset loading state
         isRequestInProgress = false;
-        hideLoading(); // Ini akan enable scroll kembali
         executeBtn.disabled = false;
+        executeBtn.classList.remove('btn-loading');
+        spinner.classList.remove('active');
     }
 }
 
@@ -671,8 +647,9 @@ function loadApis() {
                 html += `
                             </div>
                             <div class="flex gap-3 flex-wrap">
-                                <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-sm transition-all">
+                                <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-sm transition-all flex items-center justify-center">
                                     Execute
+                                    <span class="local-spinner ml-2"></span>
                                 </button>
                                 <button type="button" onclick="clearResponse(${catIdx}, ${epIdx})" class="px-6 py-2 ${isLightMode ? 'bg-gray-300 hover:bg-gray-400 border-gray-400' : 'bg-gray-700 hover:bg-gray-600 border-gray-600'} border rounded-lg font-semibold text-sm transition-colors">
                                     Clear
@@ -858,28 +835,7 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Handle Escape key untuk cancel loading (optional)
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && isRequestInProgress) {
-        // Bisa tambahkan logika untuk cancel request jika perlu
-        hideLoading();
-        isRequestInProgress = false;
-        showToast('Request cancelled', true);
-    }
-});
-
-// Pastikan scroll di-enable kembali jika page di-refresh atau di-unload
+// Cleanup saat page unload
 window.addEventListener('beforeunload', function() {
-    if (isRequestInProgress) {
-        enableScroll();
-    }
     cleanupBatteryMonitor();
-});
-
-// Handle ketika loading masih aktif tapi user refresh page
-window.addEventListener('load', function() {
-    // Pastikan tidak ada state loading yang tersisa
-    if (document.body.classList.contains('no-scroll')) {
-        enableScroll();
-    }
 });
