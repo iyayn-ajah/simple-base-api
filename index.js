@@ -622,7 +622,33 @@ app.get('/', (req, res) => {
         <!-- API List -->
         <div id="apiList" class="space-y-4"></div>
 
-        <!-- Social Media Section -->
+        <!-- Media Social -->
+        <section id="social" class="mt-12 pt-8 border-t border-gray-700 light-mode:border-gray-300">
+            <h2 class="text-lg font-bold mb-6 text-center gray-gradient-text">Connect with me</h2>
+            <div id="socialContainer" class="flex flex-wrap justify-center gap-3">
+                <a href="https://t.me/AfiqAjah" target="_blank" class="social-badge">
+                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
+                        Telegram
+                    </div>
+                </a>
+                <a href="https://whatsapp.com/channel/0029VaoJb11LikgEpNpBty0e" target="_blank" class="social-badge">
+                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
+                        WhatsApp
+                    </div>
+                </a>
+                <a href="https://www.instagram.com/iyayn_ajah/" target="_blank" class="social-badge">
+                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
+                        Instagram
+                    </div>
+                </a>
+                <a href="https://youtube.com/@rapikuzudesu" target="_blank" class="social-badge">
+                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
+                        YouTube
+                    </div>
+                </a>
+            </div>
+        </section>
+        <!-- Source Code -->
         <section id="social" class="mt-12 pt-8 border-t border-gray-700 light-mode:border-gray-300">
             <h2 class="text-lg font-bold mb-6 text-center gray-gradient-text">Source Code:</h2>
             <div id="socialContainer" class="flex flex-wrap justify-center gap-3">
