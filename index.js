@@ -268,38 +268,6 @@ app.get('/', (req, res) => {
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
 
-    /* Loading overlay */
-    .loading-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.95);
-        backdrop-filter: blur(8px);
-        z-index: 9999;
-    }
-
-    .light-mode .loading-overlay {
-        background: rgba(255, 255, 255, 0.95);
-    }
-
-    .loading-overlay.active {
-        display: flex;
-        animation: fadeIn 0.2s ease-out;
-    }
-
-    .spinner {
-        width: 50px;
-        height: 50px;
-        border: 3px solid rgba(100, 100, 100, 0.3);
-        border-top-color: var(--text-tertiary);
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-
     /* Toast notification */
     .toast {
         position: fixed;
@@ -513,12 +481,37 @@ app.get('/', (req, res) => {
         color: var(--stats-text-secondary);
     }
 
-    /* Prevent body scroll when loading */
-    body.no-scroll {
-        overflow: hidden !important;
-        position: fixed;
-        width: 100%;
-        height: 100%;
+    /* Spinner styles */
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 3px solid rgba(100, 100, 100, 0.3);
+        border-top-color: var(--text-tertiary);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    .local-spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(100, 100, 100, 0.3);
+        border-top-color: currentColor;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        display: none;
+    }
+
+    .local-spinner.active {
+        display: inline-block;
+    }
+
+    .btn-loading {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
     }
 
     /* small responsive tweaks */
@@ -528,14 +521,6 @@ app.get('/', (req, res) => {
     </style>
 </head>
 <body class="min-h-screen antialiased">
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay items-center justify-center">
-        <div class="text-center">
-            <div class="spinner mx-auto mb-4"></div>
-            <p class="font-semibold">Processing...</p>
-        </div>
-    </div>
-
     <!-- Toast -->
     <div id="toast" class="toast">
         <div class="flex items-center gap-3">
@@ -663,6 +648,7 @@ app.get('/', (req, res) => {
             ${footer}
         </footer>
     </div>
+
 <script src="script.js"></script>
 </body>
 </html>
