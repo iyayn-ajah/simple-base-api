@@ -640,7 +640,7 @@ app.get('/', (req, res) => {
                         Instagram
                     </div>
                 </a>
-                <a href="https://youtube.com/@rapikuzudesu" target="_blank" class="social-badge">
+                <a href="https://www.youtube.com/@shikaku-doang" target="_blank" class="social-badge">
                     <div class="px-4 py-2 rounded-lg text-sm transition-colors">
                         YouTube
                     </div>
