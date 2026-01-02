@@ -618,7 +618,6 @@ app.get('/', (req, res) => {
 
         <!-- Media Social  -->
         <section id="social" class="mt-12 pt-8 border-t border-gray-700 light-mode:border-gray-300">
-            <h2 class="text-lg font-bold mb-6 text-center gray-gradient-text">Media Social</h2>
             <div id="socialContainer" class="flex flex-wrap justify-center gap-3">
                 <a href="https://github.com/iyayn-ajah" target="_blank" class="social-badge">
                     <div class="px-4 py-2 rounded-lg text-sm transition-colors">
