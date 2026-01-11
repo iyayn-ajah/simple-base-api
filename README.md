@@ -118,7 +118,7 @@ res.end(buffernya);
   }
 });
 ```
-# Add categories in 
+# Add categories in index.js
 ```javascript 
 /*
 CATEGORIES MAP
