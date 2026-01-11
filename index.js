@@ -144,6 +144,11 @@ app.get('/listapi.json', (req, res) => {
   res.sendFile(path.join(__dirname, 'listapi.json'));
 });
 
+app.get('/linkbio.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'linkbio.json'));
+});
+
+
 app.get('/', (req, res) => {
     res.send(`<!DOCTYPE html>
 <html lang="en">
@@ -155,12 +160,10 @@ app.get('/', (req, res) => {
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-    /* Smooth transitions */
     * {
         transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
     }
 
-    /* Default dark mode */
     :root {
         --bg-primary: #000000;
         --bg-secondary: #111111;
@@ -183,7 +186,6 @@ app.get('/', (req, res) => {
         --stats-text-secondary: #cccccc;
     }
 
-    /* Light mode variables */
     .light-mode {
         --bg-primary: #ffffff;
         --bg-secondary: #f3f4f6;
@@ -213,7 +215,6 @@ app.get('/', (req, res) => {
         min-height: 100vh;
     }
 
-    /* Custom scrollbar */
     * {
         scrollbar-width: thin;
         scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
@@ -233,7 +234,6 @@ app.get('/', (req, res) => {
         background: var(--text-tertiary);
     }
 
-    /* Card hover effect */
     .card-hover {
         transition: all 0.3s ease-in-out;
     }
@@ -243,7 +243,6 @@ app.get('/', (req, res) => {
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     }
 
-    /* Theme toggle button */
     .theme-toggle-btn {
         position: fixed;
         bottom: 20px;
@@ -268,7 +267,6 @@ app.get('/', (req, res) => {
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
 
-    /* Toast notification */
     .toast {
         position: fixed;
         top: 24px;
@@ -289,7 +287,6 @@ app.get('/', (req, res) => {
         transform: translateX(0);
     }
 
-    /* Social badge */
     .social-badge {
         transition: all 0.3s ease;
         background: var(--social-bg);
@@ -302,7 +299,6 @@ app.get('/', (req, res) => {
         background: var(--social-hover);
     }
 
-    /* Audio player */
     audio {
         border-radius: 30px;
         padding: 5px;
@@ -310,7 +306,6 @@ app.get('/', (req, res) => {
         background: var(--input-bg);
     }
 
-    /* Media preview styles */
     .media-preview {
         width: 100%;
         max-width: 100%;
@@ -329,7 +324,6 @@ app.get('/', (req, res) => {
         border-radius: 8px;
     }
 
-    /* Gray gradient text */
     .gray-gradient-text {
         background: linear-gradient(-45deg, var(--text-primary), var(--text-secondary), var(--text-tertiary), #666666);
         background-clip: text;
@@ -345,12 +339,10 @@ app.get('/', (req, res) => {
         100% { background-position: 0% 50%; }
     }
 
-    /* Code font */
     .code-font {
         font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Search input */
     .search-input {
         background: var(--input-bg);
         border: 1px solid var(--border-color);
@@ -361,13 +353,11 @@ app.get('/', (req, res) => {
         color: var(--text-tertiary);
     }
 
-    /* Method badge */
     .method-badge {
         background: var(--method-badge);
         color: var(--text-primary);
     }
 
-    /* Status badges */
     .status-ready {
         background: rgba(34, 197, 94, 0.2);
         color: rgb(34, 197, 94);
@@ -392,7 +382,6 @@ app.get('/', (req, res) => {
         color: var(--text-secondary);
     }
 
-    /* Battery indicator */
     .battery-container {
         position: relative;
         width: 40px;
@@ -427,7 +416,6 @@ app.get('/', (req, res) => {
         background-color: #6b7280;
     }
 
-    /* Battery charging animation */
     .battery-charging {
         animation: pulseCharge 2s infinite;
     }
@@ -452,7 +440,6 @@ app.get('/', (req, res) => {
         50% { opacity: 0.5; }
     }
 
-    /* Fade in animation */
     .fade-in {
         animation: fadeIn 0.3s ease-in-out;
     }
@@ -462,14 +449,12 @@ app.get('/', (req, res) => {
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Battery status text */
     .battery-status-text {
         font-size: 9px;
         opacity: 0.8;
         margin-top: 2px;
     }
 
-    /* Stats cards */
     .stats-card {
         background: var(--stats-bg);
         border: 1px solid var(--stats-border);
@@ -481,7 +466,6 @@ app.get('/', (req, res) => {
         color: var(--stats-text-secondary);
     }
 
-    /* Spinner styles */
     .spinner {
         width: 50px;
         height: 50px;
@@ -514,14 +498,12 @@ app.get('/', (req, res) => {
         to { transform: rotate(360deg); }
     }
 
-    /* small responsive tweaks */
     @media (max-width: 640px) {
         .theme-toggle-btn { width: 52px; height: 52px; bottom: 16px; right: 16px; }
     }
     </style>
 </head>
 <body class="min-h-screen antialiased">
-    <!-- Toast -->
     <div id="toast" class="toast">
         <div class="flex items-center gap-3">
             <svg id="toastIcon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -531,20 +513,16 @@ app.get('/', (req, res) => {
         </div>
     </div>
 
-    <!-- Theme Toggle Button -->
     <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme">
-        <!-- Moon icon (dark mode) -->
         <svg id="theme-toggle-dark-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
-        <!-- Sun icon (light mode) -->
         <svg id="theme-toggle-light-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
     </button>
 
     <div class="max-w-5xl mx-auto px-4 py-8">
-        <!-- Header -->
         <header id="api" class="mb-12">
             <div class="mb-6 flex justify-center">
                 <img id="logoImg" src="${logo}" alt="Logo" class="w-full max-w-sm rounded-xl shadow-xl hover:scale-105 transition-all duration-300">
@@ -552,9 +530,7 @@ app.get('/', (req, res) => {
             <h1 id="mainTitle" class="text-4xl md:text-6xl font-black mb-4 leading-tight tracking-wider text-center gray-gradient-text">${headertitle}</h1>
             <p id="mainDescription" class="text-lg font-light tracking-wide text-center text-gray-300 light-mode:text-gray-600">${headerdescription}</p>
             
-            <!-- User Battery & Total Endpoints & Total Category Stats -->
             <div class="mt-8 flex flex-wrap justify-center items-center gap-4 md:gap-8">
-                <!-- Battery Card -->
                 <div class="stats-card flex items-center gap-3 px-4 py-3 rounded-lg">
                     <div class="flex flex-col items-center">
                         <span class="text-xs font-medium stats-text-secondary">Your Battery</span>
@@ -571,7 +547,6 @@ app.get('/', (req, res) => {
                     </div>
                 </div>
                 
-                <!-- Total Endpoints Card -->
                 <div class="stats-card flex items-center gap-3 px-4 py-3 rounded-lg">
                     <div class="flex flex-col items-center">
                         <span class="text-xs font-medium stats-text-secondary">Total Endpoints</span>
@@ -579,7 +554,6 @@ app.get('/', (req, res) => {
                     </div>
                 </div>
                 
-                <!-- Total Category Card -->
                 <div class="stats-card flex items-center gap-3 px-4 py-3 rounded-lg">
                     <div class="flex flex-col items-center">
                         <span class="text-xs font-medium stats-text-secondary">Total Categories</span>
@@ -591,7 +565,6 @@ app.get('/', (req, res) => {
             <div class="mt-6 h-1 w-32 mx-auto bg-gradient-to-r from-gray-500 via-gray-400 to-gray-500 rounded-full"></div>
         </header>
 
-        <!-- Search -->
         <div class="mb-8">
             <div class="relative">
                 <input 
@@ -606,53 +579,33 @@ app.get('/', (req, res) => {
             </div>
         </div>
 
-        <!-- No Results -->
         <div id="noResults" class="text-center py-12 hidden">
             <div class="text-4xl mb-2">🔍</div>
             <h3 class="text-sm font-bold mb-1">No endpoints found</h3>
             <p class="text-xs">Try a different search term</p>
         </div>
 
-        <!-- API List -->
         <div id="apiList" class="space-y-4"></div>
 
-        <!-- Media Social  -->
         <section id="social" class="mt-12 pt-8 border-t border-gray-700 light-mode:border-gray-300">
             <div id="socialContainer" class="flex flex-wrap justify-center gap-3">
-                <a href="https://github.com/iyayn-ajah" target="_blank" class="social-badge">
-                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
-                        GitHub
-                    </div>
-                </a>
-                <a href="https://t.me/AfiqAjah" target="_blank" class="social-badge">
-                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
-                        Telegram
-                    </div>
-                </a>
-                <a href="https://whatsapp.com/channel/0029VaoJb11LikgEpNpBty0e" target="_blank" class="social-badge">
-                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
-                        WhatsApp
-                    </div>
-                </a>
-                <a href="https://www.instagram.com/iyayn_ajah/" target="_blank" class="social-badge">
-                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
-                        Instagram
-                    </div>
-                </a>
-                <a href="https://www.youtube.com/@shikaku-doang" target="_blank" class="social-badge">
-                    <div class="px-4 py-2 rounded-lg text-sm transition-colors">
-                        YouTube
-                    </div>
-                </a>
+                <div id="socialLoading" class="text-center py-4 w-full">
+                    <div class="spinner mx-auto"></div>
+                    <p class="text-sm mt-3 text-gray-500">Loading link bio...</p>
+                </div>
+                <div id="socialError" class="text-center py-4 w-full hidden">
+                    <div class="text-4xl mb-2">⚠️</div>
+                    <h3 class="text-sm font-bold mb-1">Link bio not available</h3>
+                    <p class="text-xs">Please create <code>linkbio.json</code> file first</p>
+                    <p class="text-xs mt-2 text-gray-500">Required format: {"link_bio": [{"name": "...", "url": "..."}]}</p>
+                </div>
             </div>
         </section>
 
-        <!-- Footer -->
         <footer id="siteFooter" class="mt-12 pt-6 border-t border-gray-700 light-mode:border-gray-300 text-center text-xs">
             ${footer}
         </footer>
     </div>
-
 <script src="script.js"></script>
 </body>
 </html>
