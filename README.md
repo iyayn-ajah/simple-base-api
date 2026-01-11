@@ -14,7 +14,7 @@ There may be a module missing for the scraper. If yes, add it to package.json an
 
 ---
 # Setting API name etc
-<img id="Eum" src="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1766668996856.jpeg" >
+<img id="Eum" src="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1768109845672.jpeg" >
 
 ---
 # 🛠️ How to Add Features to index.js
@@ -146,6 +146,13 @@ res.end(buffernya);
         "query": "Parameter query"
     }
 }
+```
+## 📄 How to add link bio to linkbio.json
+```json
+{
+      "name": "Name bio",
+      "url": "link bio"
+    }
 ```
 
 -----
