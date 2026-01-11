@@ -126,7 +126,7 @@ router.get('/tools/ssweb-hp', async (req, res) => {
 
 
 /*
-AUTOMATIC API LIST ENDPOINT
+CATEGORIES MAP
 */
 router.get('/apilist', (req, res) => {
   const categoriesMap = {
