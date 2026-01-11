@@ -154,7 +154,6 @@ res.end(buffernya);
       "url": "link bio"
 }
 ```
-
 -----
 
 ## 🚀 How to *Deploy* to Vercel
