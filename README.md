@@ -1,3 +1,6 @@
+# Preview:
+<a href="https://simple-base-api-auto-load-endpoint.vercel.app/">https://simple-base-api-auto-load-endpoint.vercel.app/</a>
+
 # SIMPLE BASE API USING EXPRESS JS
 ---------
 ### 📃 T&Cs
