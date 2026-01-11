@@ -118,38 +118,18 @@ res.end(buffernya);
   }
 });
 ```
+# Add categories in 
+```javascript 
+/*
+CATEGORIES MAP
+*/
+router.get('/apilist', (req, res) => {
+  const categoriesMap = {
+    '/categories-name': 'CATEGORIES NAME API ENDPOINT'
+  };
+```
 -----
 
-## 📄 How to add API documentation to listapi.json
-# Add endpoint documentation with category
-```json
-{
-    "name": "CATEGORY NAME",
-    "items": [
-        {
-            "name": "ENDPOINT",
-            "path": "/api/category/endpoint?query=",
-            "desc": "Description",
-            "status": "ready",
-            "params": {
-                "query": "Parameter query"
-            }
-        }
-    ]
-}
-```
-# Just add API endpoint documentation
-```json
- {
-    "name": "ENDPOINT",
-    "path": "/api/category/endpoint?query=",
-    "desc": "Description",
-    "status": "ready",
-    "params": {
-        "query": "Parameter query"
-    }
-}
-```
 ## 📄 How to add link bio to linkbio.json
 ```json
 {
