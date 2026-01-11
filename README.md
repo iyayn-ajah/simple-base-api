@@ -152,7 +152,7 @@ res.end(buffernya);
 {
       "name": "Name bio",
       "url": "link bio"
-    }
+}
 ```
 
 -----
