@@ -7,7 +7,6 @@ let totalEndpoints = 0;
 let totalCategories = 0;
 let batteryMonitor = null;
 
-// Fungsi tema
 const themeToggleBtn = document.getElementById('themeToggle');
 const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
 const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
@@ -21,56 +20,39 @@ function initTheme() {
         body.classList.add('light-mode');
         themeToggleDarkIcon.classList.add('hidden');
         themeToggleLightIcon.classList.remove('hidden');
-        console.log('Light mode activated');
     } else {
         body.classList.remove('light-mode');
         themeToggleDarkIcon.classList.remove('hidden');
         themeToggleLightIcon.classList.add('hidden');
-        console.log('Dark mode activated');
     }
     
-    // Update social media badges immediately
     updateSocialBadges();
 }
 
 function toggleTheme() {
     if (body.classList.contains('light-mode')) {
-        // Switch to dark mode
         body.classList.remove('light-mode');
         themeToggleDarkIcon.classList.remove('hidden');
         themeToggleLightIcon.classList.add('hidden');
         currentTheme = 'dark';
-        console.log('Switched to dark mode');
     } else {
-        // Switch to light mode
         body.classList.add('light-mode');
         themeToggleDarkIcon.classList.add('hidden');
         themeToggleLightIcon.classList.remove('hidden');
         currentTheme = 'light';
-        console.log('Switched to light mode');
     }
     
     localStorage.setItem('theme', currentTheme);
-    
-    // Update social media badges
     updateSocialBadges();
-    
-    // Muat ulang API dengan tema yang sesuai
-    if (apiData) {
-        loadApis();
-    }
+    if (apiData) loadApis();
 }
 
-// Function to update social badges based on theme
 function updateSocialBadges() {
     const isLightMode = body.classList.contains('light-mode');
     const socialBadges = document.querySelectorAll('.social-badge > div');
     
     socialBadges.forEach(badge => {
-        // Clear previous classes
         badge.className = 'px-4 py-2 rounded-lg text-sm transition-colors';
-        
-        // Add theme-specific classes
         if (isLightMode) {
             badge.classList.add('bg-gray-100', 'text-gray-800', 'hover:bg-gray-200');
         } else {
@@ -79,28 +61,23 @@ function updateSocialBadges() {
     });
 }
 
-// Fungsi untuk mendeteksi dan menampilkan baterai pengguna secara real
 function initBatteryDetection() {
     const batteryLevelElement = document.getElementById('batteryLevel');
     const batteryPercentageElement = document.getElementById('batteryPercentage');
     const batteryStatusElement = document.getElementById('batteryStatus');
     const batteryContainer = document.getElementById('batteryContainer');
     
-    // Cek apakah Battery Status API tersedia
     if ('getBattery' in navigator) {
         navigator.getBattery().then(function(battery) {
-            // Fungsi untuk update tampilan baterai
             function updateBatteryInfo() {
                 const level = battery.level * 100;
                 const isCharging = battery.charging;
                 const roundedLevel = Math.round(level);
                 const isLightMode = body.classList.contains('light-mode');
                 
-                // Update persentase
                 batteryPercentageElement.textContent = `${roundedLevel}%`;
                 batteryLevelElement.style.width = `${level}%`;
                 
-                // Update warna berdasarkan level dan tema
                 if (level > 60) {
                     batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-green-600' : 'bg-green-500');
                 } else if (level > 20) {
@@ -109,7 +86,6 @@ function initBatteryDetection() {
                     batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-red-600' : 'bg-red-500');
                 }
                 
-                // Update status charging
                 if (isCharging) {
                     batteryContainer.classList.add('charging');
                     batteryStatusElement.textContent = 'Charging';
@@ -125,7 +101,6 @@ function initBatteryDetection() {
                     }
                 }
                 
-                // Update status dengan waktu estimasi
                 if (isCharging && battery.chargingTime !== Infinity) {
                     const hours = Math.floor(battery.chargingTime / 3600);
                     const minutes = Math.floor((battery.chargingTime % 3600) / 60);
@@ -135,21 +110,13 @@ function initBatteryDetection() {
                     const minutes = Math.floor((battery.dischargingTime % 3600) / 60);
                     batteryStatusElement.textContent = `${hours}h ${minutes}m left`;
                 }
-                
-                // Update status di console (opsional, untuk debugging)
-                console.log(`Real Battery: ${roundedLevel}% | Charging: ${isCharging}`);
             }
             
-            // Update pertama kali
             updateBatteryInfo();
-            
-            // Event listener untuk perubahan
             battery.addEventListener('levelchange', updateBatteryInfo);
             battery.addEventListener('chargingchange', updateBatteryInfo);
             battery.addEventListener('chargingtimechange', updateBatteryInfo);
             battery.addEventListener('dischargingtimechange', updateBatteryInfo);
-            
-            // Simpan reference untuk cleanup
             batteryMonitor = battery;
             
         }).catch(function(error) {
@@ -163,16 +130,11 @@ function initBatteryDetection() {
         fallbackBattery();
     }
     
-    // Fallback jika Battery API tidak tersedia
     function fallbackBattery() {
-        console.log("Using battery simulation");
         batteryStatusElement.textContent = 'Simulated';
-        
-        // Coba dapatkan dari localStorage jika ada
         let simulatedLevel = localStorage.getItem('simulatedBattery');
         if (!simulatedLevel) {
-            // Generate level awal yang realistis
-            simulatedLevel = Math.floor(Math.random() * 30) + 30; // 30-60%
+            simulatedLevel = Math.floor(Math.random() * 30) + 30;
             localStorage.setItem('simulatedBattery', simulatedLevel.toString());
         } else {
             simulatedLevel = parseInt(simulatedLevel);
@@ -180,17 +142,14 @@ function initBatteryDetection() {
         
         let isSimulatedCharging = localStorage.getItem('simulatedCharging') === 'true';
         
-        // Fungsi simulasi
         function simulateBattery() {
             const isLightMode = body.classList.contains('light-mode');
             let newLevel = simulatedLevel;
             
             if (isSimulatedCharging) {
-                // Mode charging: tambah baterai
-                const chargeRate = 0.5; // 0.5% per interval
+                const chargeRate = 0.5;
                 newLevel = Math.min(100, newLevel + chargeRate);
                 
-                // Jika sudah full, berhenti charging
                 if (newLevel >= 100) {
                     isSimulatedCharging = false;
                     localStorage.setItem('simulatedCharging', 'false');
@@ -201,11 +160,9 @@ function initBatteryDetection() {
                     batteryStatusElement.textContent = 'Charging';
                 }
             } else {
-                // Mode discharging: kurangi baterai
-                const drainRate = 0.1; // 0.1% per interval
-                newLevel = Math.max(5, newLevel - drainRate); // Minimal 5%
+                const drainRate = 0.1;
+                newLevel = Math.max(5, newLevel - drainRate);
                 
-                // Jika baterai terlalu rendah, mulai charging
                 if (newLevel <= 15 && Math.random() > 0.7) {
                     isSimulatedCharging = true;
                     localStorage.setItem('simulatedCharging', 'true');
@@ -213,7 +170,6 @@ function initBatteryDetection() {
                     batteryLevelElement.classList.add('battery-charging');
                     batteryStatusElement.textContent = 'Charging';
                 } else {
-                    // Hitung waktu tersisa (estimasi)
                     const minutesLeft = Math.round((newLevel - 5) / drainRate);
                     const hours = Math.floor(minutesLeft / 60);
                     const minutes = minutesLeft % 60;
@@ -226,16 +182,12 @@ function initBatteryDetection() {
                 }
             }
             
-            // Simpan level baru
             simulatedLevel = newLevel;
             localStorage.setItem('simulatedBattery', newLevel.toString());
-            
-            // Update tampilan
             const roundedLevel = Math.round(newLevel);
             batteryPercentageElement.textContent = `${roundedLevel}%`;
             batteryLevelElement.style.width = `${newLevel}%`;
             
-            // Update warna berdasarkan tema
             if (newLevel > 60) {
                 batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-green-600' : 'bg-green-500');
             } else if (newLevel > 20) {
@@ -243,19 +195,13 @@ function initBatteryDetection() {
             } else {
                 batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-red-600' : 'bg-red-500');
             }
-            
-            console.log(`Simulated Battery: ${roundedLevel}% | Charging: ${isSimulatedCharging}`);
         }
         
-        // Jalankan simulasi pertama kali
         simulateBattery();
-        
-        // Update setiap 10 detik
         setInterval(simulateBattery, 10000);
     }
 }
 
-// Cleanup function untuk battery monitor
 function cleanupBatteryMonitor() {
     if (batteryMonitor) {
         batteryMonitor.removeEventListener('levelchange', updateBatteryInfo);
@@ -266,13 +212,11 @@ function cleanupBatteryMonitor() {
     }
 }
 
-// Function to update total endpoints
 function updateTotalEndpoints() {
     const totalEndpointsElement = document.getElementById('totalEndpoints');
     totalEndpointsElement.textContent = totalEndpoints;
 }
 
-// Function to update total categories
 function updateTotalCategories() {
     const totalCategoriesElement = document.getElementById('totalCategories');
     totalCategoriesElement.textContent = totalCategories;
@@ -317,7 +261,6 @@ function toggleEndpoint(catIdx, epIdx) {
     icon.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
 }
 
-// Function to determine if a URL is a media file
 function isMediaFile(url) {
     const mediaExtensions = [
         '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico',
@@ -334,7 +277,6 @@ function isMediaFile(url) {
     );
 }
 
-// Function to determine content type
 function getContentType(url, contentType) {
     if (contentType) {
         if (contentType.includes('image/')) return 'image';
@@ -360,56 +302,25 @@ function getContentType(url, contentType) {
     return 'unknown';
 }
 
-// Function to create media preview
 function createMediaPreview(url, contentType) {
     const type = getContentType(url, contentType);
     let previewHtml = '';
     
     switch(type) {
         case 'image':
-            previewHtml = `
-                <div class="media-preview">
-                    <img src="${url}" class="media-image" alt="Response Image">
-                </div>
-            `;
+            previewHtml = `<div class="media-preview"><img src="${url}" class="media-image" alt="Response Image"></div>`;
             break;
-            
         case 'video':
-            previewHtml = `
-                <div class="media-preview">
-                    <video controls class="media-iframe">
-                        <source src="${url}" type="${contentType || 'video/mp4'}">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            `;
+            previewHtml = `<div class="media-preview"><video controls class="media-iframe"><source src="${url}" type="${contentType || 'video/mp4'}">Your browser does not support the video tag.</video></div>`;
             break;
-            
         case 'audio':
-            previewHtml = `
-                <div class="media-preview">
-                    <audio controls class="w-full">
-                        <source src="${url}" type="${contentType || 'audio/mpeg'}">
-                        Your browser does not support the audio tag.
-                    </audio>
-                </div>
-            `;
+            previewHtml = `<div class="media-preview"><audio controls class="w-full"><source src="${url}" type="${contentType || 'audio/mpeg'}">Your browser does not support the audio tag.</audio></div>`;
             break;
-            
         case 'pdf':
-            previewHtml = `
-                <div class="media-preview">
-                    <iframe src="${url}" class="media-iframe" frameborder="0"></iframe>                            
- </div>
-            `;
+            previewHtml = `<div class="media-preview"><iframe src="${url}" class="media-iframe" frameborder="0"></iframe></div>`;
             break;
-            
         default:
-            previewHtml = `
-                <div class="media-preview">
-                    <iframe src="${url}" class="media-iframe" frameborder="0"></iframe>                            
- </div>
-            `;
+            previewHtml = `<div class="media-preview"><iframe src="${url}" class="media-iframe" frameborder="0"></iframe></div>`;
     }
     
     return previewHtml;
@@ -430,7 +341,6 @@ async function executeRequest(e, catIdx, epIdx, method, path) {
     const curlCommand = document.getElementById(`curl-command-${catIdx}-${epIdx}`);
     const executeBtn = form.querySelector('button[type="submit"]');
     
-    // Create loading spinner element if not exists
     let spinner = executeBtn.querySelector('.local-spinner');
     if (!spinner) {
         spinner = document.createElement('span');
@@ -438,7 +348,6 @@ async function executeRequest(e, catIdx, epIdx, method, path) {
         executeBtn.appendChild(spinner);
     }
     
-    // Set loading state
     isRequestInProgress = true;
     executeBtn.disabled = true;
     executeBtn.classList.add('btn-loading');
@@ -507,7 +416,6 @@ async function executeRequest(e, catIdx, epIdx, method, path) {
         showToast('Request failed!', true);
         
     } finally {
-        // Reset loading state
         isRequestInProgress = false;
         executeBtn.disabled = false;
         executeBtn.classList.remove('btn-loading');
@@ -531,7 +439,6 @@ function loadApis() {
     
     const isLightMode = body.classList.contains('light-mode');
     
-    // Calculate total endpoints and categories
     totalEndpoints = 0;
     totalCategories = apiData.categories.length;
     
@@ -539,10 +446,7 @@ function loadApis() {
         totalEndpoints += category.items.length;
     });
     
-    // Update total endpoints display
     updateTotalEndpoints();
-    
-    // Update total categories display
     updateTotalCategories();
     
     let html = '';
@@ -687,8 +591,6 @@ function loadApis() {
     });
     
     apiList.innerHTML = html;
-    
-    // Simpan semua elemen API untuk pencarian
     allApiElements = Array.from(document.querySelectorAll('.api-item'));
 }
 
@@ -696,7 +598,6 @@ function performSearch() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
     const noResults = document.getElementById('noResults');
 
-    // Jika search kosong, tampilkan semua
     if (searchTerm === '') {
         document.querySelectorAll('.category-group').forEach(cat => {
             cat.classList.remove('hidden');
@@ -710,18 +611,15 @@ function performSearch() {
 
     let hasVisibleItems = false;
 
-    // Loop melalui semua kategori
     document.querySelectorAll('.category-group').forEach(category => {
         let categoryHasVisibleItems = false;
         
-        // Loop melalui semua item API dalam kategori
         category.querySelectorAll('.api-item').forEach(item => {
             const path = item.dataset.path.toLowerCase();
             const alias = item.dataset.alias;
             const desc = item.dataset.description;
             const categoryName = item.dataset.category;
 
-            // Cek apakah ada yang cocok dengan search term
             const matches = 
                 path.includes(searchTerm) || 
                 alias.includes(searchTerm) || 
@@ -737,7 +635,6 @@ function performSearch() {
             }
         });
 
-        // Tampilkan/sembunyikan kategori berdasarkan apakah ada item yang visible
         if (categoryHasVisibleItems) {
             category.classList.remove('hidden');
         } else {
@@ -745,7 +642,6 @@ function performSearch() {
         }
     });
 
-    // Tampilkan/sembunyikan pesan "no results"
     if (hasVisibleItems) {
         noResults.classList.add('hidden');
     } else {
@@ -753,15 +649,54 @@ function performSearch() {
     }
 }
 
-// Initialize theme - HARUS dipanggil di DOMContentLoaded
+async function loadLinkBio() {
+    try {
+        const response = await fetch('linkbio.json');
+        if (!response.ok) throw new Error('Failed to load linkbio.json');
+        const socialData = await response.json();
+        
+        if (!socialData.link_bio || !Array.isArray(socialData.link_bio)) {
+            throw new Error('Invalid linkbio.json format');
+        }
+        
+        document.getElementById('socialLoading').classList.add('hidden');
+        document.getElementById('socialError').classList.add('hidden');
+        
+        const socialContainer = document.getElementById('socialContainer');
+        const isLightMode = body.classList.contains('light-mode');
+        
+        socialData.link_bio.forEach(social => {
+            const socialElement = document.createElement('a');
+            socialElement.href = social.url;
+            socialElement.target = '_blank';
+            socialElement.className = 'social-badge';
+            
+            const innerDiv = document.createElement('div');
+            innerDiv.className = 'px-4 py-2 rounded-lg text-sm transition-colors';
+            
+            if (isLightMode) {
+                innerDiv.classList.add('bg-gray-100', 'text-gray-800', 'hover:bg-gray-200');
+            } else {
+                innerDiv.classList.add('bg-gray-800', 'text-gray-300', 'hover:bg-gray-700');
+            }
+            
+            innerDiv.textContent = social.name;
+            socialElement.appendChild(innerDiv);
+            socialContainer.appendChild(socialElement);
+        });
+        
+    } catch (error) {
+        console.error('Error loading link bio:', error);
+        document.getElementById('socialLoading').classList.add('hidden');
+        document.getElementById('socialError').classList.remove('hidden');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing theme...');
     initTheme();
-    
-    // Initialize REAL battery detection
     initBatteryDetection();
+    loadLinkBio();
     
-    // Load API data
     fetch('listapi.json')
         .then(res => {
             if (!res.ok) throw new Error('Failed to load listapi.json');
@@ -786,17 +721,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-// Add event listeners
 themeToggleBtn.addEventListener('click', toggleTheme);
 
-// Search functionality with debounce
 let searchTimeout;
 document.getElementById('searchInput').addEventListener('input', function() {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(performSearch, 300);
 });
 
-// Add keyboard shortcut for search (Ctrl/Cmd + K)
 document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
@@ -804,7 +736,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Smooth scroll untuk anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -822,20 +753,17 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Add click event to clear search when clicking outside
 document.addEventListener('click', function(event) {
     const searchInput = document.getElementById('searchInput');
     const searchContainer = document.querySelector('.relative');
     
     if (!searchContainer.contains(event.target)) {
-        // Kosongkan search jika klik di luar
         if (searchInput.value.trim() === '') {
             performSearch();
         }
     }
 });
 
-// Cleanup saat page unload
 window.addEventListener('beforeunload', function() {
     cleanupBatteryMonitor();
 });
