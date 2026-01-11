@@ -13,7 +13,10 @@ const app = express();
 const router = express.Router();
 const PORT = process.env.PORT || 3000;
 
+// Static & JSON
 app.use(express.static(path.join(__dirname)));
+app.use(express.json());
+
 /*
 For setting API name etc
 */
@@ -24,9 +27,6 @@ const headertitle = "REST EH PI AY";
 const headerdescription = "Kumpulan API Endpoint yang mungkin berguna.";
 const footer = "© 2025 IYAYN AJAH";
 
-/*
-Below are the features
-*/
 // AI ENDPOINT
 router.get('/ai/gemini', async (req, res) => {
   const text = req.query.text;
@@ -46,7 +46,7 @@ router.get('/ai/gemini', async (req, res) => {
 });
 
 router.get('/ai/geminiwithsysteminstruction', async (req, res) => {
-const text = req.query.text;
+  const text = req.query.text;
   const system = req.query.system;
   const apikey = req.query.apikey;
   if (!text || !system || !apikey) return res.status(400).json({ error: "Missing 'text' or 'system' parameter" });
@@ -55,19 +55,14 @@ const text = req.query.text;
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-lite",
       contents: `${text}`,
-      config: {
-        systemInstruction: `${system}`,
-      },
+      config: { systemInstruction: `${system}` }
     });
-    const data = {
-      text: response.text
-    };
+    const data = { text: response.text };
     return res.json(data);
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
 });
-
 
 // DOWNLOADER ENDPOINT
 router.get('/downloader/videy', async (req, res) => {
@@ -77,9 +72,7 @@ router.get('/downloader/videy', async (req, res) => {
     const videoId = url.split("=")[1];
     if (!videoId) return res.status(400).json({ error: "Invalid 'url' parameter" });
     const anunyah = `https://cdn.videy.co/${videoId}.mp4`;
-    const data = {
-      fileurl: anunyah
-    };
+    const data = { fileurl: anunyah };
     return res.json(data);
   } catch (e) {
     return res.status(500).json({ error: e.message });
@@ -87,29 +80,28 @@ router.get('/downloader/videy', async (req, res) => {
 });
 
 router.get('/downloader/threads', async (req, res) => {
-const url = req.query.url;
+  const url = req.query.url;
   if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
   try {
-const anu = await threads(url)
-return res.json(anu);
+    const anu = await threads(url)
+    return res.json(anu);
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
 });
 
-
-// TOOLS ENDPOINT 
+// TOOLS ENDPOINT
 router.get('/tools/ssweb-pc', async (req, res) => {
   const url = req.query.url;
   if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
   try {
     const resultpic = await ssweb(url, { width: 1280, height: 720 })
     const buffernya = await fetch(resultpic).then((response) => response.buffer());
-res.writeHead(200, {
-                'Content-Type': 'image/png',
-                'Content-Length': buffernya.length,
-            });
-res.end(buffernya);
+    res.writeHead(200, {
+      'Content-Type': 'image/png',
+      'Content-Length': buffernya.length,
+    });
+    res.end(buffernya);
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
@@ -121,34 +113,90 @@ router.get('/tools/ssweb-hp', async (req, res) => {
   try {
     const resultpic = await ssweb(url, { width: 720, height: 1280 })
     const buffernya = await fetch(resultpic).then((response) => response.buffer());
-res.writeHead(200, {
-                'Content-Type': 'image/png',
-                'Content-Length': buffernya.length,
-            });
-res.end(buffernya);
+    res.writeHead(200, {
+      'Content-Type': 'image/png',
+      'Content-Length': buffernya.length,
+    });
+    res.end(buffernya);
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
 });
 
-app.use('/api', router);
+
 
 /*
-Frontend
+AUTOMATIC API LIST ENDPOINT
 */
+router.get('/apilist', (req, res) => {
+  const categoriesMap = {
+    '/ai': 'AI API ENDPOINT',
+    '/downloader': 'DOWNLOADER API ENDPOINT',
+    '/tools': 'TOOLS API ENDPOINT'
+  };
+
+  // Extract params automatically from handler fn string
+  function extractParamsFromHandler(handler) {
+    const fnString = handler.toString();
+    const params = {};
+    // Find req.query.<param>
+    [...fnString.matchAll(/req\.query\.([a-zA-Z0-9_]+)/g)].forEach(match => {
+      params[match[1]] = "";
+    });
+    // Find req.body.<param>
+    [...fnString.matchAll(/req\.body\.([a-zA-Z0-9_]+)/g)].forEach(match => {
+      params[match[1]] = "";
+    });
+    return params;
+  }
+
+  const itemsByCategory = {};
+
+  router.stack.forEach(layer => {
+    if (layer.route && (layer.route.methods.get || layer.route.methods.post)) {
+      const path = layer.route.path;
+      // Category
+      let categoryName = 'OTHER';
+      Object.keys(categoriesMap).forEach(prefix => {
+        if (path.startsWith(prefix)) categoryName = categoriesMap[prefix];
+      });
+      if (!itemsByCategory[categoryName]) itemsByCategory[categoryName] = [];
+      // Params from handler
+      let params = {};
+      const routeStack = layer.route.stack || [];
+      routeStack.forEach(mw => Object.assign(params, extractParamsFromHandler(mw.handle)));
+      // Method
+      let allowed = [];
+      if (layer.route.methods.get) allowed.push('GET');
+      if (layer.route.methods.post) allowed.push('POST');
+      itemsByCategory[categoryName].push({
+        name: path,
+        path: '/api' + path,
+        desc: path,
+        status: 'ready',
+        params,
+        methods: allowed
+      });
+    }
+  });
+
+  res.json({
+    categories: Object.entries(itemsByCategory).map(([name, items]) => ({
+      name,
+      items
+    }))
+  });
+});
+
+// Frontend asset routes
 app.get('/script.js', (req, res) => {
   res.sendFile(path.join(__dirname, 'script.js'));
 });
-
-app.get('/listapi.json', (req, res) => {
-  res.sendFile(path.join(__dirname, 'listapi.json'));
-});
-
 app.get('/linkbio.json', (req, res) => {
   res.sendFile(path.join(__dirname, 'linkbio.json'));
 });
 
-
+// Main page
 app.get('/', (req, res) => {
     res.send(`<!DOCTYPE html>
 <html lang="en">
@@ -612,10 +660,12 @@ app.get('/', (req, res) => {
     `);
 });
 
-module.exports = app;
+app.use('/api', router);
 
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 }
+
+module.exports = app;
