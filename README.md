@@ -154,6 +154,13 @@ res.end(buffernya);
       "url": "link bio"
 }
 ```
+## Example
+```json
+{
+      "name": "Facebook",
+      "url": "https://web.facebook.com/shikakuiyayn"
+}
+```
 -----
 
 ## 🚀 How to *Deploy* to Vercel
