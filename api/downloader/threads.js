@@ -48,4 +48,3 @@ async function threads(url) {
   }
 }
 
-module.exports = { threads };
