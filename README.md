@@ -1,5 +1,5 @@
 # Preview:
-<a href="https://preview-base-api-v2.vercel.app/">https://simple-base-api-auto-load-endpoint.vercel.app/</a>
+<a href="https://preview-base-api-v2.vercel.app/">https://preview-base-api-v2.vercel.app/</a>
 
 # SIMPLE BASE API USING EXPRESS JS
 ---------
