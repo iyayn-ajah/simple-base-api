@@ -1,19 +1,12 @@
 const express = require('express');
 const path = require('path');
-const { JSDOM } = require('jsdom');
-const fetch = require('node-fetch');
-const { GoogleGenAI } = require('@google/genai');
-const { fromBuffer } = require('file-type');
-const axios = require("axios");
-const FormData = require("form-data");
-const { ssweb } = require('./lib/ssweb.js');
-const { threads } = require('./lib/threads.js');
+const fs = require('fs');
 
 const app = express();
-const router = express.Router();
 const PORT = process.env.PORT || 3000;
-
 app.use(express.static(path.join(__dirname)));
+app.use(express.json());
+
 /*
 For setting API name etc
 */
@@ -22,136 +15,100 @@ const favicon = "https://raw.githubusercontent.com/upload-file-lab/fileupload7/m
 const logo = "https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1764494355026.jpeg";
 const headertitle = "REST EH PI AY";
 const headerdescription = "Kumpulan API Endpoint yang mungkin berguna.";
-const footer = "© 2025 IYAYN AJAH";
+const footer = "© SHIKAKU IYAYN AJAH";
 
-/*
-Below are the features
-*/
-// AI ENDPOINT
-router.get('/ai/gemini', async (req, res) => {
-  const text = req.query.text;
-  const apikey = req.query.apikey;
-  if (!text || !apikey) return res.status(400).json({ error: "Missing 'text' or 'apikey' parameter" });
-  try {
-    const ai = new GoogleGenAI({ apiKey: `${apikey}` });
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-lite",
-      contents: `${text}`
-    });
-    const replyText = response?.text ?? response?.output?.[0]?.content ?? JSON.stringify(response);
-    return res.json({ text: replyText });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
+const router = express.Router();
+const apiPath = path.join(__dirname, 'api');
+const endpointDirs = fs.readdirSync(apiPath).filter(f => fs.statSync(path.join(apiPath, f)).isDirectory());
+
+for (const category of endpointDirs) {
+  const categoryPath = path.join(apiPath, category);
+  const files = fs.readdirSync(categoryPath).filter(f => f.endsWith('.js'));
+  for (const file of files) {
+    const routeName = path.basename(file, '.js');
+    const route = require(path.join(categoryPath, file));
+    router.use(`/${category}/${routeName}`, route);
   }
-});
+}
 
-router.get('/ai/geminiwithsysteminstruction', async (req, res) => {
-const text = req.query.text;
-  const system = req.query.system;
-  const apikey = req.query.apikey;
-  if (!text || !system || !apikey) return res.status(400).json({ error: "Missing 'text' or 'system' parameter" });
-  try {
-    const ai = new GoogleGenAI({ apiKey: `${apikey}` });
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-lite",
-      contents: `${text}`,
-      config: {
-        systemInstruction: `${system}`,
-      },
-    });
-    const data = {
-      text: response.text
-    };
-    return res.json(data);
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
+function getEndpointsFromRouter(category, file) {
+  const endpoints = [];
+  const route = require(path.join(apiPath, category, file));
+  const subRouter = route.stack ? route : route.router || route;
+  if (!subRouter || !subRouter.stack) return endpoints;
+  subRouter.stack.forEach(layer => {
+    if (layer.route) {
+      const methods = Object.keys(layer.route.methods).map(m => m.toUpperCase());
+      let params = {};
+      if (layer.route.stack && layer.route.stack.length) {
+        layer.route.stack.forEach(mw => {
+          const fnString = mw.handle.toString();
+          [...fnString.matchAll(/req\.query\.([a-zA-Z0-9_]+)/g)].forEach(match => {
+            params[match[1]] = "";
+          });
+          [...fnString.matchAll(/req\.body\.([a-zA-Z0-9_]+)/g)].forEach(match => {
+            params[match[1]] = "";
+          });
+        });
+      }
+      endpoints.push({
+        name: `/${category}/${file.replace(/\.js$/,"")}`,
+        path: `/api/${category}/${file.replace(/\.js$/,"")}`,
+        desc: `/${category}/${file.replace(/\.js$/,"")}`,
+        status: "ready",
+        params,
+        methods
+      });
+    }
+  });
+  return endpoints;
+}
+
+router.get('/apilist', (req, res) => {
+  const categories = [];
+
+  for (const category of endpointDirs) {
+    const files = fs.readdirSync(path.join(apiPath, category)).filter(f => f.endsWith('.js'));
+    const endpoints = [];
+    for (const file of files) {
+      endpoints.push(...getEndpointsFromRouter(category, file));
+    }
+    if (endpoints.length) {
+      categories.push({
+        name: `${category.toUpperCase()} API ENDPOINT`,
+        items: endpoints
+      });
+    }
   }
-});
 
+  categories.push({
+    name: "OTHER",
+    items: [
+      {
+        name: "/apilist",
+        path: "/api/apilist",
+        desc: "/apilist",
+        status: "ready",
+        params: {},
+        methods: ["GET"]
+      }
+    ]
+  });
 
-// DOWNLOADER ENDPOINT
-router.get('/downloader/videy', async (req, res) => {
-  const url = req.query.url;
-  if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
-  try {
-    const videoId = url.split("=")[1];
-    if (!videoId) return res.status(400).json({ error: "Invalid 'url' parameter" });
-    const anunyah = `https://cdn.videy.co/${videoId}.mp4`;
-    const data = {
-      fileurl: anunyah
-    };
-    return res.json(data);
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
-});
-
-router.get('/downloader/threads', async (req, res) => {
-const url = req.query.url;
-  if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
-  try {
-const anu = await threads(url)
-return res.json(anu);
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
-});
-
-
-// TOOLS ENDPOINT 
-router.get('/tools/ssweb-pc', async (req, res) => {
-  const url = req.query.url;
-  if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
-  try {
-    const resultpic = await ssweb(url, { width: 1280, height: 720 })
-    const buffernya = await fetch(resultpic).then((response) => response.buffer());
-res.writeHead(200, {
-                'Content-Type': 'image/png',
-                'Content-Length': buffernya.length,
-            });
-res.end(buffernya);
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
-});
-
-router.get('/tools/ssweb-hp', async (req, res) => {
-  const url = req.query.url;
-  if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
-  try {
-    const resultpic = await ssweb(url, { width: 720, height: 1280 })
-    const buffernya = await fetch(resultpic).then((response) => response.buffer());
-res.writeHead(200, {
-                'Content-Type': 'image/png',
-                'Content-Length': buffernya.length,
-            });
-res.end(buffernya);
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
+  res.json({ categories });
 });
 
 app.use('/api', router);
 
-/*
-Frontend
-*/
 app.get('/script.js', (req, res) => {
   res.sendFile(path.join(__dirname, 'script.js'));
 });
-
-app.get('/listapi.json', (req, res) => {
-  res.sendFile(path.join(__dirname, 'listapi.json'));
-});
-
 app.get('/linkbio.json', (req, res) => {
   res.sendFile(path.join(__dirname, 'linkbio.json'));
 });
-
 app.get('/styles.css', (req, res) => {
   res.sendFile(path.join(__dirname, 'styles.css'));
 });
-
 app.get('/', (req, res) => {
     res.send(`<!DOCTYPE html>
 <html lang="en">
@@ -273,10 +230,12 @@ app.get('/', (req, res) => {
     `);
 });
 
-module.exports = app;
+app.use('/api', router);
 
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 }
+
+module.exports = app;
