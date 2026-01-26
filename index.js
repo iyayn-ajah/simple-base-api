@@ -17,6 +17,7 @@ const headertitle = "REST EH PI AY";
 const headerdescription = "Kumpulan API Endpoint yang mungkin berguna.";
 const footer = "© SHIKAKU IYAYN AJAH";
 
+
 const router = express.Router();
 const apiPath = path.join(__dirname, 'api');
 const endpointDirs = fs.readdirSync(apiPath).filter(f => fs.statSync(path.join(apiPath, f)).isDirectory());
@@ -30,6 +31,7 @@ for (const category of endpointDirs) {
     router.use(`/${category}/${routeName}`, route);
   }
 }
+
 
 function getEndpointsFromRouter(category, file) {
   const endpoints = [];
