@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 router.get('/', async (req, res) => {
   const url = req.query.url;
   if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
@@ -15,4 +16,5 @@ router.get('/', async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 });
+
 module.exports = router;
