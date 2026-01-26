@@ -1,5 +1,5 @@
 # Preview:
-Coming soon 
+<a href="https://preview-base-api-v2.vercel.app/">https://simple-base-api-auto-load-endpoint.vercel.app/</a>
 
 # SIMPLE BASE API USING EXPRESS JS
 ---------
@@ -17,7 +17,7 @@ There may be a module missing for the scraper. If yes, add it to package.json an
 
 ---
 # Setting API name etc
-<img id="Eum" src="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1768129316891.jpeg" >
+<img id="Eum" src="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1769467489135.jpeg" >
 
 ---
 # 🛠️ How to Add Features to api
@@ -92,7 +92,9 @@ module.exports = router; // must be used
 ````
 ## Example:
 ```javascript
-const axios = require('axios')
+// in api/tools/ssweb-hp.js
+const axios = require('axios');
+const fetch = require('node-fetch');
 const express = require('express');
 const router = express.Router();
 
@@ -148,6 +150,14 @@ module.exports = router;
 {
       "name": "Name bio",
       "url": "link bio"
+}
+```
+
+## Example
+```json
+{
+      "name": "Facebook",
+      "url": "https://web.facebook.com/shikakuiyayn"
 }
 ```
 -----
