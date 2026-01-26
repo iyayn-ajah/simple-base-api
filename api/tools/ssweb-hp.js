@@ -45,4 +45,5 @@ res.end(buffernya);
   }
 });
 
+module.exports = router;
 
