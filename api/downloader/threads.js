@@ -2,18 +2,6 @@ const axios = require('axios')
 const express = require('express');
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-const url = req.query.url;
-  if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
-  try {
-const anu = await threads(url)
-return res.json(anu);
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
-});
-module.exports = router;
-
 async function threads(url) {
   try {
     const apiUrl = `https://snapthreads.net/api/download?url=${encodeURIComponent(url)}`;
@@ -47,4 +35,17 @@ async function threads(url) {
     };
   }
 }
+
+router.get('/', async (req, res) => {
+const url = req.query.url;
+  if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
+  try {
+const anu = await threads(url)
+return res.json(anu);
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+module.exports = router;
+
 
