@@ -137,6 +137,13 @@ router.get('/apilist', (req, res) => {
       "url": "link bio"
 }
 ```
+## Example
+```json
+{
+      "name": "Facebook",
+      "url": "https://web.facebook.com/shikakuiyayn"
+}
+```
 -----
 
 ## 🚀 How to *Deploy* to Vercel
