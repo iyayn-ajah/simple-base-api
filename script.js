@@ -338,7 +338,9 @@ async function executeRequest(e, catIdx, epIdx, method, path) {
     const responseDiv = document.getElementById(`response-${catIdx}-${epIdx}`);
     const responseContent = document.getElementById(`response-content-${catIdx}-${epIdx}`);
     const curlSection = document.getElementById(`curl-section-${catIdx}-${epIdx}`);
+    const urlSection = document.getElementById(`url-section-${catIdx}-${epIdx}`);
     const curlCommand = document.getElementById(`curl-command-${catIdx}-${epIdx}`);
+    const urlCommand = document.getElementById(`url-command-${catIdx}-${epIdx}`);
     const executeBtn = form.querySelector('button[type="submit"]');
     
     let spinner = executeBtn.querySelector('.local-spinner');
@@ -366,6 +368,10 @@ async function executeRequest(e, catIdx, epIdx, method, path) {
     const curlText = `curl -X ${method} "${fullPath}"`;
     curlCommand.textContent = curlText;
     curlSection.classList.remove('hidden');
+    
+    const urlText = fullPath;
+    urlCommand.textContent = urlText;
+    urlSection.classList.remove('hidden');
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 30000);
@@ -426,8 +432,10 @@ async function executeRequest(e, catIdx, epIdx, method, path) {
 function clearResponse(catIdx, epIdx) {
     const responseDiv = document.getElementById(`response-${catIdx}-${epIdx}`);
     const curlSection = document.getElementById(`curl-section-${catIdx}-${epIdx}`);
+    const urlSection = document.getElementById(`url-section-${catIdx}-${epIdx}`);
     responseDiv.classList.add('hidden');
     curlSection.classList.add('hidden');
+    urlSection.classList.add('hidden');
 }
 
 function loadApis() {
@@ -560,6 +568,18 @@ function loadApis() {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                    
+                    <div id="url-section-${catIdx}-${epIdx}" class="hidden mt-4">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <h4 class="font-bold text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'}">🌐 URL Request</h4>
+                            <button onclick="copyText(document.getElementById('url-command-${catIdx}-${epIdx}').textContent, 'URL')" class="px-2 py-1 ${isLightMode ? 'bg-gray-200 hover:bg-gray-300' : 'bg-gray-800 hover:bg-gray-700'} rounded text-[10px] transition-colors">
+                                Copy URL
+                            </button>
+                        </div>
+                        <div class="${isLightMode ? 'bg-gray-200 border-gray-300' : 'bg-gray-900/50 border-gray-700'} border px-3 py-2 rounded-lg">
+                            <code id="url-command-${catIdx}-${epIdx}" class="code-font text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'} break-all"></code>
+                        </div>
                     </div>
                     
                     <div id="curl-section-${catIdx}-${epIdx}" class="hidden mt-4">
@@ -697,7 +717,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initBatteryDetection();
     loadLinkBio();
     
-    fetch('listapi.json')
+    fetch('/api/apilist')
         .then(res => {
             if (!res.ok) throw new Error('Failed to load listapi.json');
             return res.json();
@@ -714,7 +734,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="text-center p-8 bg-red-900/20 border border-red-700 rounded-lg">
                     <div class="text-4xl mb-4">⚠️</div>
                     <h3 class="font-bold text-lg mb-2">Failed to load API data</h3>
-                    <p class="text-sm">Please check if listapi.json exists on the server</p>
+                    <p class="text-sm">Please check if /api/apilist exists on the server</p>
                     <p class="text-xs mt-4 text-gray-400">Error: ${err.message}</p>
                 </div>
             `;
