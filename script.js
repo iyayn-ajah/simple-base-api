@@ -717,7 +717,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initBatteryDetection();
     loadLinkBio();
     
-    fetch('/api/apilist')
+    fetch('/listapi.json')
         .then(res => {
             if (!res.ok) throw new Error('Failed to load listapi.json');
             return res.json();
