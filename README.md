@@ -11,7 +11,7 @@
 ### 📃 NOTE
 There may be a module missing for the scraper. If yes, add it to package.json and index.js.
 
-In this repo there are 3 branch 
+This repo have 3 branch 
 1. <a href="https://github.com/iyayn-ajah/simple-base-api/tree/main">https://github.com/iyayn-ajah/simple-base-api/tree/main</a>, add manual endpoint documentation to UI. 
 Preview: <a href="https://simple-epiay.vercel.app/">https://simple-epiay.vercel.app/</a>
 
