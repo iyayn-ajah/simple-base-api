@@ -12,11 +12,14 @@
 There may be a module missing for the scraper. If yes, add it to package.json and index.js.
 
 In this repo there are 3 branch 
-1. <a href="https://github.com/iyayn-ajah/simple-base-api/tree/main">https://github.com/iyayn-ajah/simple-base-api/tree/main</a>, add manual endpoint documentation to UI. Preview: <a href="https://simple-epiay.vercel.app/">https://simple-epiay.vercel.app/</a>
+1. <a href="https://github.com/iyayn-ajah/simple-base-api/tree/main">https://github.com/iyayn-ajah/simple-base-api/tree/main</a>, add manual endpoint documentation to UI. 
+Preview: <a href="https://simple-epiay.vercel.app/">https://simple-epiay.vercel.app/</a>
 
-2. <a href="https://github.com/iyayn-ajah/simple-base-api/tree/autoload-endpoint">https://github.com/iyayn-ajah/simple-base-api/tree/autoload-endpoint</a>, auto load endpoint and automatic added to UI, Preview: <a href="https://base-api-auto-load-endpoint.vercel.app/">https://base-api-auto-load-endpoint.vercel.app/</a>
+2. <a href="https://github.com/iyayn-ajah/simple-base-api/tree/autoload-endpoint">https://github.com/iyayn-ajah/simple-base-api/tree/autoload-endpoint</a>, auto load endpoint and automatic added to UI, 
+Preview: <a href="https://base-api-auto-load-endpoint.vercel.app/">https://base-api-auto-load-endpoint.vercel.app/</a>
 
-3. <a href="https://github.com/iyayn-ajah/simple-base-api/tree/setting-api-in-folder">https://github.com/iyayn-ajah/simple-base-api/tree/setting-api-in-folder</a>, setting endpoint in folder like whatsapp bot script plugins + autoload category and endpoint. Preview: <a href="https://base-api-setting-endpoint-in-folder.vercel.app/">https://base-api-setting-endpoint-in-folder.vercel.app/</a>
+3. <a href="https://github.com/iyayn-ajah/simple-base-api/tree/setting-api-in-folder">https://github.com/iyayn-ajah/simple-base-api/tree/setting-api-in-folder</a>, setting endpoint in folder like whatsapp bot script plugins + autoload category and endpoint. 
+Preview: <a href="https://base-api-setting-endpoint-in-folder.vercel.app/">https://base-api-setting-endpoint-in-folder.vercel.app/</a>
 
 ---------
 
