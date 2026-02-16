@@ -12,6 +12,7 @@
     "axios": "^1.10.0",
     "cheerio": "github:iyayn-ajah/cheerio",
     "crypto": "^1.0.1",
+    "crypto-js": "^4.2.0",
     "express": "^4.18.2",
     "file-type": "^16.5.3",
     "form-data": "^4.0.0",
@@ -20,6 +21,7 @@
     "mime-types": "^2.1.35",
     "node-fetch": "^2.6.9",
     "path": "^0.12.7",
+    "querystring": "^0.2.1",
     "uuid": "^13.0.0"
   }
 }
