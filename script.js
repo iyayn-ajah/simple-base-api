@@ -1,7 +1,6 @@
 const BASE_URL = window.location.origin;
 let isRequestInProgress = false;
 let apiData = null;
-let currentTheme = 'dark';
 let allApiElements = [];
 let totalEndpoints = 0;
 let totalCategories = 0;
@@ -10,55 +9,73 @@ let batteryMonitor = null;
 const themeToggleBtn = document.getElementById('themeToggle');
 const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
 const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+const html = document.documentElement;
 const body = document.body;
 
 function initTheme() {
     const savedTheme = localStorage.getItem('theme') || 'dark';
-    currentTheme = savedTheme;
     
     if (savedTheme === 'light') {
-        body.classList.add('light-mode');
-        themeToggleDarkIcon.classList.add('hidden');
-        themeToggleLightIcon.classList.remove('hidden');
+        enableLightMode();
     } else {
-        body.classList.remove('light-mode');
-        themeToggleDarkIcon.classList.remove('hidden');
-        themeToggleLightIcon.classList.add('hidden');
+        enableDarkMode();
     }
-    
-    updateSocialBadges();
 }
 
 function toggleTheme() {
     if (body.classList.contains('light-mode')) {
-        body.classList.remove('light-mode');
-        themeToggleDarkIcon.classList.remove('hidden');
-        themeToggleLightIcon.classList.add('hidden');
-        currentTheme = 'dark';
+        enableDarkMode();
+        localStorage.setItem('theme', 'dark');
     } else {
-        body.classList.add('light-mode');
-        themeToggleDarkIcon.classList.add('hidden');
-        themeToggleLightIcon.classList.remove('hidden');
-        currentTheme = 'light';
+        enableLightMode();
+        localStorage.setItem('theme', 'light');
     }
-    
-    localStorage.setItem('theme', currentTheme);
-    updateSocialBadges();
-    if (apiData) loadApis();
 }
 
-function updateSocialBadges() {
-    const isLightMode = body.classList.contains('light-mode');
-    const socialBadges = document.querySelectorAll('.social-badge > div');
+function enableLightMode() {
+    body.classList.add('light-mode');
+    body.classList.remove('bg-black', 'text-white');
+    body.classList.add('bg-white', 'text-black');
     
-    socialBadges.forEach(badge => {
-        badge.className = 'px-4 py-2 rounded-lg text-sm transition-colors';
-        if (isLightMode) {
-            badge.classList.add('bg-gray-100', 'text-gray-800', 'hover:bg-gray-200');
-        } else {
-            badge.classList.add('bg-gray-800', 'text-gray-300', 'hover:bg-gray-700');
-        }
+    document.querySelectorAll('.border-white').forEach(el => {
+        el.classList.remove('border-white');
+        el.classList.add('border-black');
     });
+    
+    document.querySelectorAll('audio').forEach(audio => {
+        audio.classList.remove('border-white');
+        audio.classList.add('border-black');
+    });
+    
+    themeToggleBtn.classList.remove('bg-black', 'border-white');
+    themeToggleBtn.classList.add('bg-white', 'border-black');
+    themeToggleBtn.style.boxShadow = '0.3rem 0.3rem 0 #ccc';
+    
+    themeToggleDarkIcon.classList.add('hidden');
+    themeToggleLightIcon.classList.remove('hidden');
+}
+
+function enableDarkMode() {
+    body.classList.remove('light-mode');
+    body.classList.remove('bg-white', 'text-black');
+    body.classList.add('bg-black', 'text-white');
+    
+    document.querySelectorAll('.border-black').forEach(el => {
+        el.classList.remove('border-black');
+        el.classList.add('border-white');
+    });
+    
+    document.querySelectorAll('audio').forEach(audio => {
+        audio.classList.remove('border-black');
+        audio.classList.add('border-white');
+    });
+    
+    themeToggleBtn.classList.remove('bg-white', 'border-black');
+    themeToggleBtn.classList.add('bg-black', 'border-white');
+    themeToggleBtn.style.boxShadow = '0.3rem 0.3rem 0 #222';
+    
+    themeToggleDarkIcon.classList.remove('hidden');
+    themeToggleLightIcon.classList.add('hidden');
 }
 
 function initBatteryDetection() {
@@ -73,26 +90,15 @@ function initBatteryDetection() {
                 const level = battery.level * 100;
                 const isCharging = battery.charging;
                 const roundedLevel = Math.round(level);
-                const isLightMode = body.classList.contains('light-mode');
                 
                 batteryPercentageElement.textContent = `${roundedLevel}%`;
                 batteryLevelElement.style.width = `${level}%`;
                 
-                if (level > 60) {
-                    batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-green-600' : 'bg-green-500');
-                } else if (level > 20) {
-                    batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-yellow-600' : 'bg-yellow-500');
-                } else {
-                    batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-red-600' : 'bg-red-500');
-                }
-                
                 if (isCharging) {
                     batteryContainer.classList.add('charging');
                     batteryStatusElement.textContent = 'Charging';
-                    batteryLevelElement.classList.add('battery-charging');
                 } else {
                     batteryContainer.classList.remove('charging');
-                    batteryLevelElement.classList.remove('battery-charging');
                     
                     if (battery.dischargingTime === Infinity) {
                         batteryStatusElement.textContent = 'Fully charged';
@@ -143,7 +149,6 @@ function initBatteryDetection() {
         let isSimulatedCharging = localStorage.getItem('simulatedCharging') === 'true';
         
         function simulateBattery() {
-            const isLightMode = body.classList.contains('light-mode');
             let newLevel = simulatedLevel;
             
             if (isSimulatedCharging) {
@@ -154,7 +159,6 @@ function initBatteryDetection() {
                     isSimulatedCharging = false;
                     localStorage.setItem('simulatedCharging', 'false');
                     batteryContainer.classList.remove('charging');
-                    batteryLevelElement.classList.remove('battery-charging');
                     batteryStatusElement.textContent = 'Fully charged';
                 } else {
                     batteryStatusElement.textContent = 'Charging';
@@ -167,7 +171,6 @@ function initBatteryDetection() {
                     isSimulatedCharging = true;
                     localStorage.setItem('simulatedCharging', 'true');
                     batteryContainer.classList.add('charging');
-                    batteryLevelElement.classList.add('battery-charging');
                     batteryStatusElement.textContent = 'Charging';
                 } else {
                     const minutesLeft = Math.round((newLevel - 5) / drainRate);
@@ -187,28 +190,10 @@ function initBatteryDetection() {
             const roundedLevel = Math.round(newLevel);
             batteryPercentageElement.textContent = `${roundedLevel}%`;
             batteryLevelElement.style.width = `${newLevel}%`;
-            
-            if (newLevel > 60) {
-                batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-green-600' : 'bg-green-500');
-            } else if (newLevel > 20) {
-                batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-yellow-600' : 'bg-yellow-500');
-            } else {
-                batteryLevelElement.className = 'battery-level ' + (isLightMode ? 'bg-red-600' : 'bg-red-500');
-            }
         }
         
         simulateBattery();
         setInterval(simulateBattery, 10000);
-    }
-}
-
-function cleanupBatteryMonitor() {
-    if (batteryMonitor) {
-        batteryMonitor.removeEventListener('levelchange', updateBatteryInfo);
-        batteryMonitor.removeEventListener('chargingchange', updateBatteryInfo);
-        batteryMonitor.removeEventListener('chargingtimechange', updateBatteryInfo);
-        batteryMonitor.removeEventListener('dischargingtimechange', updateBatteryInfo);
-        batteryMonitor = null;
     }
 }
 
@@ -244,6 +229,51 @@ function copyText(text, type = 'path') {
         showToast(`${type} copied to clipboard!`);
     }).catch(() => {
         showToast('Failed to copy', true);
+    });
+}
+
+function copyResponse(catIdx, epIdx) {
+    const responseContent = document.getElementById(`response-content-${catIdx}-${epIdx}`);
+    
+    // Get text content from different types of response
+    let textToCopy = '';
+    
+    // Check if it's a JSON response
+    const preElement = responseContent.querySelector('pre');
+    if (preElement) {
+        textToCopy = preElement.textContent;
+    } 
+    // Check if it's an image
+    else if (responseContent.querySelector('img')) {
+        const imgElement = responseContent.querySelector('img');
+        textToCopy = imgElement.src;
+    }
+    // Check if it's a video
+    else if (responseContent.querySelector('video')) {
+        const videoElement = responseContent.querySelector('video');
+        const sourceElement = videoElement.querySelector('source');
+        textToCopy = sourceElement ? sourceElement.src : videoElement.src;
+    }
+    // Check if it's an audio
+    else if (responseContent.querySelector('audio')) {
+        const audioElement = responseContent.querySelector('audio');
+        const sourceElement = audioElement.querySelector('source');
+        textToCopy = sourceElement ? sourceElement.src : audioElement.src;
+    }
+    // Check if it's an iframe
+    else if (responseContent.querySelector('iframe')) {
+        const iframeElement = responseContent.querySelector('iframe');
+        textToCopy = iframeElement.src;
+    }
+    // Fallback to innerHTML
+    else {
+        textToCopy = responseContent.textContent;
+    }
+    
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        showToast('Response copied to clipboard!');
+    }).catch(() => {
+        showToast('Failed to copy response', true);
     });
 }
 
@@ -386,7 +416,7 @@ async function executeRequest(e, catIdx, epIdx, method, path) {
         
         if (contentType?.includes("application/json")) {
             const data = await response.json();
-            responseContent.innerHTML = `<pre class="code-font text-sm overflow-auto">${JSON.stringify(data, null, 2)}</pre>`;
+            responseContent.innerHTML = `<pre class="text-sm overflow-auto">${JSON.stringify(data, null, 2)}</pre>`;
         } else if (contentType?.startsWith("image/")) {
             const blob = await response.blob();
             const imageUrl = URL.createObjectURL(blob);
@@ -409,7 +439,7 @@ async function executeRequest(e, catIdx, epIdx, method, path) {
             if (isMediaFile(text)) {
                 responseContent.innerHTML = createMediaPreview(text, contentType);
             } else {
-                responseContent.innerHTML = `<pre class="code-font text-sm overflow-auto">${text}</pre>`;
+                responseContent.innerHTML = `<pre class="text-sm overflow-auto">${text}</pre>`;
             }
         }
         
@@ -418,7 +448,7 @@ async function executeRequest(e, catIdx, epIdx, method, path) {
     } catch (error) {
         clearTimeout(timeoutId);
         const errorMsg = error.name === 'AbortError' ? 'Request timeout (30s)' : error.message;
-        responseContent.innerHTML = `<pre class="text-red-400 code-font text-sm">Error: ${errorMsg}</pre>`;
+        responseContent.innerHTML = `<pre class="text-sm">Error: ${errorMsg}</pre>`;
         showToast('Request failed!', true);
         
     } finally {
@@ -446,6 +476,7 @@ function loadApis() {
     }
     
     const isLightMode = body.classList.contains('light-mode');
+    const borderClass = isLightMode ? 'border-black' : 'border-white';
     
     totalEndpoints = 0;
     totalCategories = apiData.categories.length;
@@ -461,16 +492,16 @@ function loadApis() {
     apiData.categories.forEach((category, catIdx) => {
         html += `
         <div class="category-group fade-in" data-category="${category.name.toLowerCase()}">
-            <div class="${isLightMode ? 'bg-white border-gray-300' : 'bg-gray-900 border-gray-700'} border rounded-xl overflow-hidden card-hover">
-                <button onclick="toggleCategory(${catIdx})" class="w-full px-4 py-3 flex items-center justify-between ${isLightMode ? 'hover:bg-gray-100' : 'hover:bg-gray-800'} transition-colors">
+            <div class="raised-shadow ${borderClass} bg-transparent">
+                <button onclick="toggleCategory(${catIdx})" class="w-full px-4 py-3 flex items-center justify-between hover:bg-opacity-20 transition-colors">
                     <div class="flex items-center gap-3">
                         <span class="text-lg">📁</span>
                         <div class="text-left">
-                            <h3 class="font-bold text-sm gray-gradient-text">${category.name}</h3>
-                            <p class="text-xs ${isLightMode ? 'text-gray-600' : 'text-gray-400'}">${category.items.length} endpoints</p>
+                            <h3 class="font-bold text-sm">${category.name}</h3>
+                            <p class="text-xs opacity-80">${category.items.length} endpoints</p>
                         </div>
                     </div>
-                    <svg id="cat-icon-${catIdx}" class="w-4 h-4 ${isLightMode ? 'text-gray-600' : 'text-gray-400'} transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg id="cat-icon-${catIdx}" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                     </svg>
                 </button>
@@ -478,7 +509,7 @@ function loadApis() {
                 <div id="cat-${catIdx}" class="hidden">`;
         
         category.items.forEach((item, epIdx) => {
-            const method = 'GET';
+            const method = item.method ? item.method.toUpperCase() : 'GET';
             const pathParts = item.path.split('?');
             const path = pathParts[0];
             const queryParams = new URLSearchParams(pathParts[1] || '');
@@ -487,53 +518,58 @@ function loadApis() {
             if (item.status === 'update') statusClass = 'status-update';
             if (item.status === 'error') statusClass = 'status-error';
 
+            let methodClass = 'method-get';
+            if (method === 'POST') methodClass = 'method-post';
+            else if (method === 'PUT') methodClass = 'method-put';
+            else if (method === 'DELETE') methodClass = 'method-delete';
+
             html += `
-            <div class="api-item border-t ${isLightMode ? 'border-gray-300' : 'border-gray-700'}" 
+            <div class="api-item border-t ${borderClass}" 
                 data-method="${method}"
                 data-path="${path}"
                 data-alias="${item.name.toLowerCase()}"
                 data-description="${item.desc.toLowerCase()}"
                 data-category="${category.name.toLowerCase()}">
-                <button onclick="toggleEndpoint(${catIdx}, ${epIdx})" class="w-full px-4 py-2.5 flex items-center justify-between ${isLightMode ? 'hover:bg-gray-100' : 'hover:bg-gray-800'} transition-colors">
+                <button onclick="toggleEndpoint(${catIdx}, ${epIdx})" class="w-full px-4 py-2.5 flex items-center justify-between hover:bg-opacity-20 transition-colors">
                     <div class="flex items-center gap-3 flex-1 min-w-0">
-                        <span class="${isLightMode ? 'bg-gray-200 text-gray-800' : 'bg-gray-700 text-white'} px-2 py-0.5 rounded text-[10px] flex-shrink-0">${method}</span>
+                        <span class="${methodClass} flex-shrink-0">${method}</span>
                         <div class="text-left flex-1 min-w-0">
-                            <p class="code-font font-semibold text-xs truncate">${path}</p>
+                            <p class="font-semibold text-xs truncate">${path}</p>
                             <div class="flex items-center gap-2 mt-0.5">
-                                <p class="text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'} truncate">${item.name}</p>
-                                <span class="px-1.5 py-0.5 text-[10px] rounded-full ${statusClass} flex-shrink-0">${item.status || 'ready'}</span>
+                                <p class="text-xs opacity-80 truncate">${item.name}</p>
+                                <span class="${statusClass} flex-shrink-0">${item.status || 'ready'}</span>
                             </div>
                         </div>
                     </div>
-                    <svg id="ep-icon-${catIdx}-${epIdx}" class="w-4 h-4 ${isLightMode ? 'text-gray-600' : 'text-gray-400'} transition-transform duration-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg id="ep-icon-${catIdx}-${epIdx}" class="w-4 h-4 transition-transform duration-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                     </svg>
                 </button>
                 
-                <div id="ep-${catIdx}-${epIdx}" class="hidden ${isLightMode ? 'bg-gray-100' : 'bg-gray-800/30'} px-4 py-3 border-t ${isLightMode ? 'border-gray-300' : 'border-gray-700'}">
-                    <p class="${isLightMode ? 'text-gray-700' : 'text-gray-300'} mb-3 text-xs">${item.desc}</p>
+                <div id="ep-${catIdx}-${epIdx}" class="hidden px-4 py-3 border-t ${borderClass} bg-transparent">
+                    <p class="mb-3 text-xs opacity-80">${item.desc}</p>
                     
                     <div class="mb-3">
                         <div class="flex items-center justify-between mb-1.5">
-                            <h4 class="font-bold text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'}">🔗 Endpoint</h4>
+                            <h4 class="font-bold text-xs">🔗 Endpoint</h4>
                             <div class="flex gap-2">
-                                <button onclick="copyText('${path}', 'Path')" class="px-2 py-1 ${isLightMode ? 'bg-gray-200 hover:bg-gray-300' : 'bg-gray-800 hover:bg-gray-700'} rounded text-[10px] transition-colors">
+                                <button onclick="copyText('${path}', 'Path')" class="px-2 py-1 border ${borderClass} bg-transparent hover:bg-opacity-20 rounded-none text-[10px] transition-colors">
                                     Copy Path
                                 </button>
-                                <button onclick="copyText('${BASE_URL}${path}', 'URL')" class="px-2 py-1 ${isLightMode ? 'bg-gray-200 hover:bg-gray-300' : 'bg-gray-800 hover:bg-gray-700'} rounded text-[10px] transition-colors">
+                                <button onclick="copyText('${BASE_URL}${path}', 'URL')" class="px-2 py-1 border ${borderClass} bg-transparent hover:bg-opacity-20 rounded-none text-[10px] transition-colors">
                                     Copy Full URL
                                 </button>
                             </div>
                         </div>
-                        <div class="${isLightMode ? 'bg-gray-200 border-gray-300' : 'bg-gray-900/50 border-gray-700'} border px-3 py-2 rounded-lg">
-                            <code class="code-font text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'}">${path}</code>
+                        <div class="border ${borderClass} px-3 py-2 bg-transparent">
+                            <code class="text-xs">${path}</code>
                         </div>
                     </div>`;
 
             if (item.status === 'ready') {
                 html += `
                     <div>
-                        <h4 class="font-bold text-sm ${isLightMode ? 'text-gray-700' : 'text-gray-300'} mb-3">⚡ Try it out</h4>
+                        <h4 class="font-bold text-sm mb-3">⚡ Try it out</h4>
                         <form id="form-${catIdx}-${epIdx}" onsubmit="executeRequest(event, ${catIdx}, ${epIdx}, '${method}', '${path}')">
                             <div class="space-y-3 mb-4">`;
                 
@@ -542,13 +578,13 @@ function loadApis() {
                         const isRequired = !queryParams.has(paramName) || queryParams.get(paramName) === '';
                         html += `
                             <div>
-                                <label class="block text-sm font-medium ${isLightMode ? 'text-gray-700' : 'text-gray-300'} mb-2">
-                                    ${paramName} ${isRequired ? '<span class="text-red-500">*</span>' : ''}
+                                <label class="block text-sm font-medium mb-2">
+                                    ${paramName} ${isRequired ? '<span class="opacity-80">*</span>' : ''}
                                 </label>
                                 <input 
                                     type="text" 
                                     name="${paramName}" 
-                                    class="search-input w-full px-4 py-2 rounded-lg focus:outline-none focus:border-blue-500 code-font text-sm" 
+                                    class="border ${borderClass} bg-transparent w-full px-4 py-2 focus:outline-none focus:border-current text-sm" 
                                     placeholder="${item.params[paramName]}" 
                                     ${isRequired ? 'required' : ''}
                                 >
@@ -559,11 +595,11 @@ function loadApis() {
                 html += `
                             </div>
                             <div class="flex gap-3 flex-wrap">
-                                <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-sm transition-all flex items-center justify-center">
+                                <button type="submit" class="px-6 py-2 border ${borderClass} bg-transparent hover:bg-opacity-20 rounded-none font-semibold text-sm transition-all flex items-center justify-center">
                                     Execute
                                     <span class="local-spinner ml-2"></span>
                                 </button>
-                                <button type="button" onclick="clearResponse(${catIdx}, ${epIdx})" class="px-6 py-2 ${isLightMode ? 'bg-gray-300 hover:bg-gray-400 border-gray-400' : 'bg-gray-700 hover:bg-gray-600 border-gray-600'} border rounded-lg font-semibold text-sm transition-colors">
+                                <button type="button" onclick="clearResponse(${catIdx}, ${epIdx})" class="px-6 py-2 border ${borderClass} bg-transparent hover:bg-opacity-20 rounded-none font-semibold text-sm transition-colors">
                                     Clear
                                 </button>
                             </div>
@@ -572,34 +608,39 @@ function loadApis() {
                     
                     <div id="url-section-${catIdx}-${epIdx}" class="hidden mt-4">
                         <div class="flex items-center justify-between mb-1.5">
-                            <h4 class="font-bold text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'}">🌐 URL Request</h4>
-                            <button onclick="copyText(document.getElementById('url-command-${catIdx}-${epIdx}').textContent, 'URL')" class="px-2 py-1 ${isLightMode ? 'bg-gray-200 hover:bg-gray-300' : 'bg-gray-800 hover:bg-gray-700'} rounded text-[10px] transition-colors">
+                            <h4 class="font-bold text-xs">🌐 URL Request</h4>
+                            <button onclick="copyText(document.getElementById('url-command-${catIdx}-${epIdx}').textContent, 'URL')" class="px-2 py-1 border ${borderClass} bg-transparent hover:bg-opacity-20 rounded-none text-[10px] transition-colors">
                                 Copy URL
                             </button>
                         </div>
-                        <div class="${isLightMode ? 'bg-gray-200 border-gray-300' : 'bg-gray-900/50 border-gray-700'} border px-3 py-2 rounded-lg">
-                            <code id="url-command-${catIdx}-${epIdx}" class="code-font text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'} break-all"></code>
+                        <div class="border ${borderClass} px-3 py-2 bg-transparent">
+                            <code id="url-command-${catIdx}-${epIdx}" class="text-xs break-all"></code>
                         </div>
                     </div>
                     
                     <div id="curl-section-${catIdx}-${epIdx}" class="hidden mt-4">
                         <div class="flex items-center justify-between mb-1.5">
-                            <h4 class="font-bold text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'}">📟 cURL Command</h4>
-                            <button onclick="copyText(document.getElementById('curl-command-${catIdx}-${epIdx}').textContent, 'cURL')" class="px-2 py-1 ${isLightMode ? 'bg-gray-200 hover:bg-gray-300' : 'bg-gray-800 hover:bg-gray-700'} rounded text-[10px] transition-colors">
+                            <h4 class="font-bold text-xs">📟 cURL Command</h4>
+                            <button onclick="copyText(document.getElementById('curl-command-${catIdx}-${epIdx}').textContent, 'cURL')" class="px-2 py-1 border ${borderClass} bg-transparent hover:bg-opacity-20 rounded-none text-[10px] transition-colors">
                                 Copy cURL
                             </button>
                         </div>
-                        <div class="${isLightMode ? 'bg-gray-200 border-gray-300' : 'bg-gray-900/50 border-gray-700'} border px-3 py-2 rounded-lg">
-                            <code id="curl-command-${catIdx}-${epIdx}" class="code-font text-xs ${isLightMode ? 'text-gray-700' : 'text-gray-300'} break-all">curl -X ${method} "${BASE_URL}${path}"</code>
+                        <div class="border ${borderClass} px-3 py-2 bg-transparent">
+                            <code id="curl-command-${catIdx}-${epIdx}" class="text-xs break-all">curl -X ${method} "${BASE_URL}${path}"</code>
                         </div>
                     </div>
                     
                     <div id="response-${catIdx}-${epIdx}" class="hidden mt-4">
-                        <h4 class="font-bold text-sm ${isLightMode ? 'text-gray-700' : 'text-gray-300'} mb-2">📄 Response</h4>
-                        <div class="${isLightMode ? 'bg-gray-200 border-gray-300' : 'bg-gray-900/50 border-gray-700'} border px-4 py-3 rounded-lg max-h-96 overflow-auto" id="response-content-${catIdx}-${epIdx}"></div>
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-bold text-sm">📄 Response</h4>
+                            <button onclick="copyResponse(${catIdx}, ${epIdx})" class="px-2 py-1 border ${borderClass} bg-transparent hover:bg-opacity-20 rounded-none text-[10px] transition-colors">
+                                Copy Response
+                            </button>
+                        </div>
+                        <div class="border ${borderClass} px-4 py-3 bg-transparent max-h-96 overflow-auto" id="response-content-${catIdx}-${epIdx}"></div>
                     </div>`;
             } else {
-                html += `<div class="px-4 py-3 status-warning border rounded-lg text-sm">⚠️ This endpoint is not available for testing</div>`;
+                html += `<div class="px-4 py-3 border ${borderClass} text-sm">⚠️ This endpoint is not available for testing</div>`;
             }
 
             html += `
@@ -684,6 +725,7 @@ async function loadLinkBio() {
         
         const socialContainer = document.getElementById('socialContainer');
         const isLightMode = body.classList.contains('light-mode');
+        const borderClass = isLightMode ? 'border-black' : 'border-white';
         
         socialData.link_bio.forEach(social => {
             const socialElement = document.createElement('a');
@@ -692,13 +734,7 @@ async function loadLinkBio() {
             socialElement.className = 'social-badge';
             
             const innerDiv = document.createElement('div');
-            innerDiv.className = 'px-4 py-2 rounded-lg text-sm transition-colors';
-            
-            if (isLightMode) {
-                innerDiv.classList.add('bg-gray-100', 'text-gray-800', 'hover:bg-gray-200');
-            } else {
-                innerDiv.classList.add('bg-gray-800', 'text-gray-300', 'hover:bg-gray-700');
-            }
+            innerDiv.className = `px-4 py-2 border ${borderClass} bg-transparent hover:bg-opacity-20 transition-colors text-sm`;
             
             innerDiv.textContent = social.name;
             socialElement.appendChild(innerDiv);
@@ -717,7 +753,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initBatteryDetection();
     loadLinkBio();
     
-    fetch('/listapi.json')
+    fetch('/api/apilist')
         .then(res => {
             if (!res.ok) throw new Error('Failed to load listapi.json');
             return res.json();
@@ -731,11 +767,11 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error loading API data:', err);
             const apiList = document.getElementById('apiList');
             apiList.innerHTML = `
-                <div class="text-center p-8 bg-red-900/20 border border-red-700 rounded-lg">
+                <div class="text-center p-8 border-2 border-white light-mode:border-black">
                     <div class="text-4xl mb-4">⚠️</div>
                     <h3 class="font-bold text-lg mb-2">Failed to load API data</h3>
                     <p class="text-sm">Please check if /api/apilist exists on the server</p>
-                    <p class="text-xs mt-4 text-gray-400">Error: ${err.message}</p>
+                    <p class="text-xs mt-4 opacity-80">Error: ${err.message}</p>
                 </div>
             `;
         });
@@ -756,34 +792,12 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-            window.scrollTo({
-                top: targetElement.offsetTop - 80,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-document.addEventListener('click', function(event) {
-    const searchInput = document.getElementById('searchInput');
-    const searchContainer = document.querySelector('.relative');
-    
-    if (!searchContainer.contains(event.target)) {
-        if (searchInput.value.trim() === '') {
-            performSearch();
-        }
-    }
-});
-
 window.addEventListener('beforeunload', function() {
-    cleanupBatteryMonitor();
+    if (batteryMonitor) {
+        batteryMonitor.removeEventListener('levelchange', updateBatteryInfo);
+        batteryMonitor.removeEventListener('chargingchange', updateBatteryInfo);
+        batteryMonitor.removeEventListener('chargingtimechange', updateBatteryInfo);
+        batteryMonitor.removeEventListener('dischargingtimechange', updateBatteryInfo);
+        batteryMonitor = null;
+    }
 });
