@@ -1,3 +1,6 @@
+# Preview:
+<a href="https://base-api-setting-endpoint-in-folder.vercel.app/">https://base-api-setting-endpoint-in-folder.vercel.app/</a>
+
 # SIMPLE BASE API USING EXPRESS JS
 ---------
 ### 📃 T&Cs
@@ -10,29 +13,21 @@
 ---------
 ### 📃 NOTE
 There may be a module missing for the scraper. If yes, add it to package.json and index.js.
-
-This repo have 3 branch 
-1. <a href="https://github.com/iyayn-ajah/simple-base-api/tree/main">https://github.com/iyayn-ajah/simple-base-api/tree/main</a>, add manual endpoint documentation to UI. 
-Preview: <a href="https://simple-epiay.vercel.app/">https://simple-epiay.vercel.app/</a>
-
-2. <a href="https://github.com/iyayn-ajah/simple-base-api/tree/autoload-endpoint">https://github.com/iyayn-ajah/simple-base-api/tree/autoload-endpoint</a>, auto load endpoint and automatic added to UI, 
-Preview: <a href="https://base-api-auto-load-endpoint.vercel.app/">https://base-api-auto-load-endpoint.vercel.app/</a>
-
-3. <a href="https://github.com/iyayn-ajah/simple-base-api/tree/setting-api-in-folder">https://github.com/iyayn-ajah/simple-base-api/tree/setting-api-in-folder</a>, setting endpoint in folder like whatsapp bot script plugins + autoload category and endpoint. 
-Preview: <a href="https://base-api-setting-endpoint-in-folder.vercel.app/">https://base-api-setting-endpoint-in-folder.vercel.app/</a>
-
 ---------
 
 ---
 # Setting API name etc
-<img id="Eum" src="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1768109845672.jpeg" >
+<img id="Eum" src="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1769467489135.jpeg" >
 
 ---
-# 🛠️ How to Add Features to index.js
+# 🛠️ How to Add Features to api
 Just follow this code structure:
 # json result
 ```javascript
-router.get('/category-name/endpoin-name', async (req, res) => {
+const express = require('express'); // must be used
+const router = express.Router(); // must be used
+
+router.get('/', async (req, res) => {
   const text = req.query.text; // for https://example.com/api?text=
   if (!text) return res.status(400).json({ error: "Missing 'text' parameter" });
   try {
@@ -45,10 +40,16 @@ const data = {
     return res.status(500).json({ error: e.message });
   }
 });
+
+module.exports = router; // must be used
 ````
 ## Example
 ```javascript
-router.get('/downloader/videy', async (req, res) => {
+// in api/downloader/videy.js
+const express = require('express');
+const router = express.Router();
+
+router.get('/', async (req, res) => {
   const url = req.query.url;
   if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
   try {
@@ -63,10 +64,15 @@ router.get('/downloader/videy', async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 });
+
+module.exports = router;
 ```
 # for results in file form
 ```javascript
-router.get('/category-name/endpoin-name', async (req, res) => {
+const express = require('express'); // must be used
+const router = express.Router(); // must be used
+
+router.get('/', async (req, res) => {
   const text = req.query.text; // for https://example.com/api?text=
   if (!text) return res.status(400).json({ error: "Missing 'text' parameter" });
   try {
@@ -81,9 +87,17 @@ res.end(buffer);
     return res.status(500).json({ error: e.message });
   }
 });
+
+module.exports = router; // must be used
 ````
 ## Example:
 ```javascript
+// in api/tools/ssweb-hp.js
+const axios = require('axios');
+const fetch = require('node-fetch');
+const express = require('express');
+const router = express.Router();
+
 async function ssweb(url, { width = 1280, height = 720, full_page = false, device_scale = 1 } = {}) {
     try {
         if (!url.startsWith('https://')) throw new Error('Invalid url');
@@ -110,7 +124,8 @@ async function ssweb(url, { width = 1280, height = 720, full_page = false, devic
         throw new Error(error.message);
     }
 }
-router.get('/tools/ssweb-hp', async (req, res) => {
+
+router.get('/', async (req, res) => {
   const url = req.query.url;
   if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
   try {
@@ -125,39 +140,11 @@ res.end(buffernya);
     return res.status(500).json({ error: e.message });
   }
 });
+
+module.exports = router;
 ```
 -----
 
-## 📄 How to add API documentation to listapi.json
-# Add endpoint documentation with category
-```json
-{
-    "name": "CATEGORY NAME",
-    "items": [
-        {
-            "name": "ENDPOINT",
-            "path": "/api/category/endpoint?query=",
-            "desc": "Description",
-            "status": "ready",
-            "params": {
-                "query": "Parameter query"
-            }
-        }
-    ]
-}
-```
-# Just add API endpoint documentation
-```json
- {
-    "name": "ENDPOINT",
-    "path": "/api/category/endpoint?query=",
-    "desc": "Description",
-    "status": "ready",
-    "params": {
-        "query": "Parameter query"
-    }
-}
-```
 ## 📄 How to add link bio to linkbio.json
 ```json
 {
@@ -165,6 +152,7 @@ res.end(buffernya);
       "url": "link bio"
 }
 ```
+
 ## Example
 ```json
 {
