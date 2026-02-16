@@ -1,5 +1,5 @@
 # Preview:
-<a href="https://base-api-setting-endpoint-in-folder.vercel.app/">https://base-api-setting-endpoint-in-folder.vercel.app/</a>
+<a href="https://simple-epiay.vercel.app/">https://simple-epiay.vercel.app/</a>
 
 # SIMPLE BASE API USING EXPRESS JS
 ---------
@@ -16,8 +16,18 @@ There may be a module missing for the scraper. If yes, add it to package.json an
 ---------
 
 ---
-# Setting API name etc
-<img id="Eum" src="https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1769467489135.jpeg" >
+# Example setting API name etc in index.js
+```javascript
+/*
+For setting API name etc
+*/
+const title = "EH PI AY DOANG";
+const favicon = "https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1764494355026.jpeg?format=png&name=900x900";
+const logo = "https://raw.githubusercontent.com/upload-file-lab/fileupload7/main/uploads/1770044887516.png";
+const headertitle = "REST EH PI AY";
+const headerdescription = "Kumpulan API Endpoint yang mungkin berguna.";
+const footer = "© SHIKAKU IYAYN AJAH";
+```
 
 ---
 # 🛠️ How to Add Features to api
