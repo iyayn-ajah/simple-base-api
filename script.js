@@ -551,7 +551,7 @@ function loadApis() {
                     
                     <div class="mb-3">
                         <div class="flex items-center justify-between mb-1.5">
-                            <h4 class="font-bold text-xs">🔗 Endpoint</h4>
+                            <h4 class="font-bold text-xs">Endpoint</h4>
                             <div class="flex gap-2">
                                 <button onclick="copyText('${path}', 'Path')" class="px-2 py-1 border ${borderClass} bg-transparent hover:bg-opacity-20 rounded-none text-[10px] transition-colors">
                                     Copy Path
@@ -569,7 +569,7 @@ function loadApis() {
             if (item.status === 'ready') {
                 html += `
                     <div>
-                        <h4 class="font-bold text-sm mb-3">⚡ Try it out</h4>
+                        <h4 class="font-bold text-sm mb-3">Try it out</h4>
                         <form id="form-${catIdx}-${epIdx}" onsubmit="executeRequest(event, ${catIdx}, ${epIdx}, '${method}', '${path}')">
                             <div class="space-y-3 mb-4">`;
                 
