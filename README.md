@@ -15,6 +15,30 @@
 There may be a module missing for the scraper. If yes, add it to package.json and index.js.
 ---------
 
+---------
+# Structure Map
+```
+simple-base-api/
+├── README.md
+├── index.js
+├── package.json
+├── script.js
+├── styles.css
+├── linkbio.json
+├── vercel.json
+└── api
+    ├── ai
+    │   ├── gemini.js
+    │   └── geminiwithsysteminstruction.js
+    ├── downloader
+    │   ├── threads.js
+    │   └── videy.js
+    └── tools
+        ├── ssweb-hp.js
+        └── ssweb-pc.js
+```
+---------
+
 ---
 # Example setting API name etc in index.js
 ```javascript
