@@ -235,37 +235,30 @@ function copyText(text, type = 'path') {
 function copyResponse(catIdx, epIdx) {
     const responseContent = document.getElementById(`response-content-${catIdx}-${epIdx}`);
     
-    // Get text content from different types of response
     let textToCopy = '';
     
-    // Check if it's a JSON response
     const preElement = responseContent.querySelector('pre');
     if (preElement) {
         textToCopy = preElement.textContent;
     } 
-    // Check if it's an image
     else if (responseContent.querySelector('img')) {
         const imgElement = responseContent.querySelector('img');
         textToCopy = imgElement.src;
     }
-    // Check if it's a video
     else if (responseContent.querySelector('video')) {
         const videoElement = responseContent.querySelector('video');
         const sourceElement = videoElement.querySelector('source');
         textToCopy = sourceElement ? sourceElement.src : videoElement.src;
     }
-    // Check if it's an audio
     else if (responseContent.querySelector('audio')) {
         const audioElement = responseContent.querySelector('audio');
         const sourceElement = audioElement.querySelector('source');
         textToCopy = sourceElement ? sourceElement.src : audioElement.src;
     }
-    // Check if it's an iframe
     else if (responseContent.querySelector('iframe')) {
         const iframeElement = responseContent.querySelector('iframe');
         textToCopy = iframeElement.src;
     }
-    // Fallback to innerHTML
     else {
         textToCopy = responseContent.textContent;
     }
@@ -608,7 +601,7 @@ function loadApis() {
                     
                     <div id="url-section-${catIdx}-${epIdx}" class="hidden mt-4">
                         <div class="flex items-center justify-between mb-1.5">
-                            <h4 class="font-bold text-xs">🌐 URL Request</h4>
+                            <h4 class="font-bold text-xs">URL Request</h4>
                             <button onclick="copyText(document.getElementById('url-command-${catIdx}-${epIdx}').textContent, 'URL')" class="px-2 py-1 border ${borderClass} bg-transparent hover:bg-opacity-20 rounded-none text-[10px] transition-colors">
                                 Copy URL
                             </button>
@@ -620,7 +613,7 @@ function loadApis() {
                     
                     <div id="curl-section-${catIdx}-${epIdx}" class="hidden mt-4">
                         <div class="flex items-center justify-between mb-1.5">
-                            <h4 class="font-bold text-xs">📟 cURL Command</h4>
+                            <h4 class="font-bold text-xs">cURL Command</h4>
                             <button onclick="copyText(document.getElementById('curl-command-${catIdx}-${epIdx}').textContent, 'cURL')" class="px-2 py-1 border ${borderClass} bg-transparent hover:bg-opacity-20 rounded-none text-[10px] transition-colors">
                                 Copy cURL
                             </button>
@@ -632,7 +625,7 @@ function loadApis() {
                     
                     <div id="response-${catIdx}-${epIdx}" class="hidden mt-4">
                         <div class="flex items-center justify-between mb-2">
-                            <h4 class="font-bold text-sm">📄 Response</h4>
+                            <h4 class="font-bold text-sm">Response</h4>
                             <button onclick="copyResponse(${catIdx}, ${epIdx})" class="px-2 py-1 border ${borderClass} bg-transparent hover:bg-opacity-20 rounded-none text-[10px] transition-colors">
                                 Copy Response
                             </button>
