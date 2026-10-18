@@ -1,8 +1,25 @@
+// in api/tools/gaussianblurimage.js
 const express = require('express');
 const fetch = require('node-fetch');
 const sharp = require('sharp');
 const fs = require('fs').promises;
 const router = express.Router();
+
+async function gaussianblurimage(buffer, blurFactor) {
+  const parsedFactor = parseFloat(blurFactor);
+
+  if (isNaN(parsedFactor) || parsedFactor < 1 || parsedFactor > 40) {
+    throw new RangeError('blurFactor harus berupa angka di antara 1 dan 40.');
+  }
+
+  if (!Buffer.isBuffer(buffer)) {
+    throw new TypeError('Parameter buffer harus berupa instance dari Buffer.');
+  }
+
+  return await sharp(buffer)
+    .blur(parsedFactor)
+    .toBuffer();
+}
 
 router.get('/', async (req, res) => {
   const imgurl = req.query.imgurl;
@@ -22,19 +39,3 @@ router.get('/', async (req, res) => {
 });
 
 module.exports = router;
-
-async function gaussianblurimage(buffer, blurFactor) {
-  const parsedFactor = parseFloat(blurFactor);
-
-  if (isNaN(parsedFactor) || parsedFactor < 1 || parsedFactor > 40) {
-    throw new RangeError('blurFactor harus berupa angka di antara 1 dan 40.');
-  }
-
-  if (!Buffer.isBuffer(buffer)) {
-    throw new TypeError('Parameter buffer harus berupa instance dari Buffer.');
-  }
-
-  return await sharp(buffer)
-    .blur(parsedFactor)
-    .toBuffer();
-}
