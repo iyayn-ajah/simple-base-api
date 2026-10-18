@@ -4,10 +4,11 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   const text = req.query.text;
-  const apikey = req.query.apikey;
-  if (!text || !apikey) return res.status(400).json({ error: "Missing 'text' or 'apikey' parameter" });
+  const apikey = process.env.GEMINI_API_KEY;
+  if (!text) return res.status(400).json({ error: "Missing 'text' parameter" });
+  if (!apikey) return res.status(500).json({ error: "Server is missing GEMINI_API_KEY configuration" });
   try {
-    const ai = new GoogleGenAI({ apiKey: `${apikey}` });
+    const ai = new GoogleGenAI({ apiKey: apikey });
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-lite",
       contents: `${text}`
