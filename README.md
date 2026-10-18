@@ -32,8 +32,7 @@ simple-base-api/
     │   ├── videy.js
     │   └── x.js
     └── tools
-        ├── ssweb-hp.js
-        └── ssweb-pc.js
+        └── gaussianblurimage.js
 ```
 
 ---
