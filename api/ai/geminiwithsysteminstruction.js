@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
   try {
     const ai = new GoogleGenAI({ apiKey: `${apikey}` });
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-lite",
+      model: "gemini-3.1-flash-lite",
       contents: `${text}`,
       config: {
         systemInstruction: `${system}`,
