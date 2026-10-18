@@ -31,7 +31,6 @@ for (const category of endpointDirs) {
   }
 }
 
-
 function getEndpointsFromRouter(category, file) {
   const endpoints = [];
   const route = require(path.join(apiPath, category, file));
@@ -81,21 +80,6 @@ router.get('/apilist', (req, res) => {
       });
     }
   }
-
-  // Add "OTHER" for /apilist itself
-  categories.push({
-    name: "OTHER",
-    items: [
-      {
-        name: "/apilist",
-        path: "/api/apilist",
-        desc: "/apilist",
-        status: "ready",
-        params: {},
-        methods: ["GET"]
-      }
-    ]
-  });
 
   res.json({ categories });
 });
@@ -327,8 +311,6 @@ app.get('/docs', (req, res) => {
 </html>
     `);
 });
-
-app.use('/api', router);
 
 if (require.main === module) {
   app.listen(PORT, () => {
