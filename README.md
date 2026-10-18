@@ -123,50 +123,41 @@ module.exports = router; // must be used
 ````
 ## Example:
 ```javascript
-// in api/tools/ssweb-hp.js
-const axios = require('axios');
-const fetch = require('node-fetch');
+// in api/tools/gaussianblurimage.js
 const express = require('express');
+const fetch = require('node-fetch');
+const sharp = require('sharp');
+const fs = require('fs').promises;
 const router = express.Router();
 
-async function ssweb(url, { width = 1280, height = 720, full_page = false, device_scale = 1 } = {}) {
-    try {
-        if (!url.startsWith('https://')) throw new Error('Invalid url');
-        if (isNaN(width) || isNaN(height) || isNaN(device_scale)) throw new Error('Width, height, and scale must be a number');
-        if (typeof full_page !== 'boolean') throw new Error('Full page must be a boolean');
-        
-        const { data } = await axios.post('https://gcp.imagy.app/screenshot/createscreenshot', {
-            url: url,
-            browserWidth: parseInt(width),
-            browserHeight: parseInt(height),
-            fullPage: full_page,
-            deviceScaleFactor: parseInt(device_scale),
-            format: 'png'
-        }, {
-            headers: {
-                'content-type': 'application/json',
-                referer: 'https://imagy.app/full-page-screenshot-taker/',
-                'user-agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36'
-            }
-        });
-        
-        return data.fileUrl;
-    } catch (error) {
-        throw new Error(error.message);
-    }
+async function gaussianblurimage(buffer, blurFactor) {
+  const parsedFactor = parseFloat(blurFactor);
+
+  if (isNaN(parsedFactor) || parsedFactor < 1 || parsedFactor > 40) {
+    throw new RangeError('blurFactor harus berupa angka di antara 1 dan 40.');
+  }
+
+  if (!Buffer.isBuffer(buffer)) {
+    throw new TypeError('Parameter buffer harus berupa instance dari Buffer.');
+  }
+
+  return await sharp(buffer)
+    .blur(parsedFactor)
+    .toBuffer();
 }
 
 router.get('/', async (req, res) => {
-  const url = req.query.url;
-  if (!url) return res.status(400).json({ error: "Missing 'url' parameter" });
+  const imgurl = req.query.imgurl;
+  const factor = req.query.factor;
+  if (!imgurl || !factor) return res.status(400).json({ error: "Missing 'imgurl' or 'factor' parameter" });
   try {
-    const resultpic = await ssweb(url, { width: 720, height: 1280 })
-    const buffernya = await fetch(resultpic).then((response) => response.buffer());
-res.writeHead(200, {
-                'Content-Type': 'image/png',
-                'Content-Length': buffernya.length,
-            });
-res.end(buffernya);
+    const bufferyeah = await fetch(imgurl).then((response) => response.buffer());
+    const buffernya = await gaussianblurimage(bufferyeah, factor);
+    res.writeHead(200, {
+      'Content-Type': 'image/png',
+      'Content-Length': buffernya.length,
+    });
+    return res.end(buffernya);
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
