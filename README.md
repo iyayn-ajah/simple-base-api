@@ -17,13 +17,6 @@ There may be a module missing for the scraper. If yes, add it to package.json an
 # Structure Map
 ```
 simple-base-api/
-├── README.md
-├── index.js
-├── package.json
-├── script.js
-├── styles.css
-├── linkbio.json
-├── vercel.json
 └── api
     ├── ai
     │   ├── gemini.js
@@ -33,6 +26,14 @@ simple-base-api/
     │   └── x.js
     └── tools
         └── gaussianblurimage.js
+├── README.md
+├── index.js
+├── package.json
+├── script.js
+├── styles.css
+├── linkbio.json
+└── vercel.json
+
 ```
 
 ---
